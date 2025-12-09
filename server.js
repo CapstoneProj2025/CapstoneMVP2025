@@ -1,3 +1,6 @@
+// server.js
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -5,7 +8,7 @@ const mysql = require("mysql2/promise");
 const bcrypt = require("bcrypt");
 
 const app = express();
-const PORT = 3000; // static port
+const PORT = process.env.PORT || 3000;
 
 // ------------------ MIDDLEWARE ------------------
 app.use(cors());
@@ -17,10 +20,10 @@ app.use(express.static(path.join(__dirname)));
 
 // ------------------ DATABASE POOL ------------------
 const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "9Beachroad1!", // <- change to your password
-  database: "education_platform",
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "education_platform",
   waitForConnections: true,
   connectionLimit: 10,
 });
@@ -44,7 +47,7 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true });
 });
 
-// ------------------ REGISTER PARENT + STUDENT (parent signup page) ------------------
+// ------------------ REGISTER PARENT + STUDENT ------------------
 app.post("/api/register-parent", async (req, res) => {
   const {
     parentName,
@@ -167,7 +170,7 @@ app.post("/api/register-student", async (req, res) => {
 
     if (existingParents.length > 0) {
       parentId = existingParents[0].id;
-      // Optionally keep parent name updated
+      // keep parent name up-to-date if needed
       await conn.execute(
         "UPDATE parents SET full_name = COALESCE(full_name, ?) WHERE id = ?",
         [parentName, parentId]
@@ -319,6 +322,121 @@ app.post("/api/update-student-profile", async (req, res) => {
       success: false,
       message: "Server error updating profile.",
     });
+  }
+});
+
+// ------------------ LOGIN (Sign In) ------------------
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Email and password are required." });
+  }
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    // 1) Try to find a student with this email
+    const [students] = await conn.execute(
+      `SELECT id, full_name, email, password_hash, age, interest, parent_id
+       FROM students WHERE email = ?`,
+      [email]
+    );
+
+    if (students.length > 0) {
+      const student = students[0];
+
+      if (!student.password_hash) {
+        return res.status(401).json({
+          success: false,
+          message: "This student account does not have a password set.",
+        });
+      }
+
+      const match = await bcrypt.compare(password, student.password_hash);
+      if (!match) {
+        return res
+          .status(401)
+          .json({ success: false, message: "Incorrect password." });
+      }
+
+      // Fetch parent info if present
+      let parentName = null;
+      let parentEmail = null;
+
+      if (student.parent_id) {
+        const [parents] = await conn.execute(
+          "SELECT full_name, email FROM parents WHERE id = ?",
+          [student.parent_id]
+        );
+        if (parents.length > 0) {
+          parentName = parents[0].full_name;
+          parentEmail = parents[0].email;
+        }
+      }
+
+      conn.release();
+
+      return res.json({
+        success: true,
+        role: "student",
+        studentId: student.id,
+        name: student.full_name,
+        interest: student.interest,
+        parentName,
+        parentEmail,
+      });
+    }
+
+    // 2) If not a student, try parent
+    const [parents] = await conn.execute(
+      `SELECT id, full_name, email, password_hash
+       FROM parents WHERE email = ?`,
+      [email]
+    );
+
+    if (parents.length === 0) {
+      conn.release();
+      return res
+        .status(401)
+        .json({ success: false, message: "No account found for that email." });
+    }
+
+    const parent = parents[0];
+
+    if (!parent.password_hash) {
+      conn.release();
+      return res.status(401).json({
+        success: false,
+        message: "This parent account does not have a password set.",
+      });
+    }
+
+    const match = await bcrypt.compare(password, parent.password_hash);
+    if (!match) {
+      conn.release();
+      return res
+        .status(401)
+        .json({ success: false, message: "Incorrect password." });
+    }
+
+    conn.release();
+
+    return res.json({
+      success: true,
+      role: "parent",
+      parentId: parent.id,
+      name: parent.full_name,
+    });
+  } catch (error) {
+    if (conn) conn.release();
+    console.error("❌ Error in /api/login:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error during login." });
   }
 });
 
