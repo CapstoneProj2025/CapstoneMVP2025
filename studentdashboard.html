@@ -18,10 +18,27 @@
 
     <main class="container">
         <div class="dashboard-container">
-            <!-- Welcome line: hidden when a format is open -->
-            <h1 class="dashboard-title mb-3">
-                Welcome back, <span id="userName">Student</span>
-            </h1>
+            <!-- NEW: top bar inside the big white box -->
+            <div class="dashboard-top-bar">
+                <!-- Settings icon (top-left) -->
+                <button
+                    type="button"
+                    class="settings-icon"
+                    id="settingsButton"
+                    aria-label="User settings">
+                    ⚙
+                </button>
+
+                <!-- Subject dropdown (top-right) -->
+                <div class="subject-select">
+                    <label for="subjectSelect" class="form-label mb-0 me-2">Subject:</label>
+                    <select id="subjectSelect" class="form-select form-select-sm">
+                        <option value="Engineering">Engineering</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Maths">Maths</option>
+                    </select>
+                </div>
+            </div>
 
             <!-- Video header row: only shown in Videos mode -->
             <div class="video-header-row" id="videoHeaderRow">
@@ -45,7 +62,7 @@
 
                 <!-- Main learning panel (hidden until a format is chosen) -->
                 <div class="learning-panel" id="learningPanel">
-                    <!-- Stylised dropdown in top-right -->
+                    <!-- Stylised dropdown in top-right of gradient box -->
                     <div class="lesson-format-dropdown" id="lessonFormatDropdown">
                         <button type="button" class="dropdown-toggle" id="lessonFormatToggle">
                             Lesson format: <span id="lessonFormatLabel">Lessons</span>
@@ -214,15 +231,37 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Personalisation from URL
+            // personalisation / query params
             const params = new URLSearchParams(window.location.search);
             const name = params.get('name');
-            if (name) {
-                const userNameEl = document.getElementById('userName');
-                if (userNameEl) userNameEl.textContent = name;
+            const interestsParam = params.get('interests');
+            const parentName = params.get('parentName') || '';
+            const parentEmail = params.get('parentEmail') || '';
+            const studentId = params.get('studentId') || '';
+
+            const subjectSelect = document.getElementById('subjectSelect');
+            if (subjectSelect) {
+                if (interestsParam && ['Engineering', 'Physics', 'Maths'].includes(interestsParam)) {
+                    subjectSelect.value = interestsParam;
+                } else {
+                    subjectSelect.value = 'Engineering';
+                }
             }
 
-            // Core elements
+            const settingsButton = document.getElementById('settingsButton');
+            if (settingsButton) {
+                settingsButton.addEventListener('click', () => {
+                    const subject = subjectSelect ? subjectSelect.value : (interestsParam || '');
+                    const url =
+                        `user-settings.html?studentId=${encodeURIComponent(studentId)}` +
+                        `&name=${encodeURIComponent(name || '')}` +
+                        `&interests=${encodeURIComponent(subject || '')}` +
+                        `&parentName=${encodeURIComponent(parentName)}` +
+                        `&parentEmail=${encodeURIComponent(parentEmail)}`;
+                    window.location.href = url;
+                });
+            }
+
             const learningSelection = document.getElementById('learningSelection');
             const learningPanel = document.getElementById('learningPanel');
             const lessonLayout = document.getElementById('lessonLayout');
@@ -231,36 +270,28 @@
             const simplePlaceholder = document.getElementById('simplePlaceholder');
             const simplePlaceholderText = document.getElementById('simplePlaceholderText');
 
-            // Dropdown bits
             const dropdown = document.getElementById('lessonFormatDropdown');
             const menu = document.getElementById('lessonFormatMenu');
             const toggleBtn = document.getElementById('lessonFormatToggle');
             const formatLabel = document.getElementById('lessonFormatLabel');
 
-            // Selection square buttons
             const selectionButtons = document.querySelectorAll('.selection-btn');
-
-            // Question / answer logic (Lessons)
             const answerOptions = document.querySelectorAll('.answer-option');
             const lessonCompleteModal = document.getElementById('lessonCompleteModal');
             const backToDashboardBtn = document.getElementById('backToDashboardBtn');
 
-            // Dashboard title & video header row
-            const dashboardTitle = document.querySelector('.dashboard-title');
             const videoHeaderRow = document.getElementById('videoHeaderRow');
 
-            // Video viewer elements
             const recommendedVideoBtn = document.getElementById('recommendedVideoBtn');
             const videoViewerModal = document.getElementById('videoViewerModal');
             const exitViewingBtn = document.getElementById('exitViewingBtn');
             const videoBackToDashboardBtn = document.getElementById('videoBackToDashboardBtn');
             const videoIframe = document.getElementById('videoIframe');
 
-            // Initial state: show selection square, hide main panel
+            // initial state
             if (learningSelection) learningSelection.style.display = 'flex';
             if (learningPanel) learningPanel.style.display = 'none';
 
-            // Helper: set active format (lessons / videos / games)
             function setActiveFormat(format) {
                 if (!simplePlaceholder || !simplePlaceholderText || !formatLabel) return;
 
@@ -287,24 +318,19 @@
                     simplePlaceholderText.textContent = format;
                 }
 
-                // Update dropdown label
                 formatLabel.textContent = format.charAt(0).toUpperCase() + format.slice(1);
 
-                // Video header row only for Videos
                 if (videoHeaderRow) {
                     videoHeaderRow.style.display = (format === 'videos') ? 'flex' : 'none';
                 }
             }
 
-            // Helper: show main panel for a given format
             function showPanelFor(format) {
                 if (learningSelection) learningSelection.style.display = 'none';
                 if (learningPanel) learningPanel.style.display = 'block';
-                if (dashboardTitle) dashboardTitle.style.display = 'none';
                 setActiveFormat(format);
             }
 
-            // 2. Selection square behaviour
             selectionButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const format = btn.getAttribute('data-format') || 'lessons';
@@ -312,7 +338,6 @@
                 });
             });
 
-            // 3. Dropdown behaviour (top-right)
             if (toggleBtn && dropdown && menu) {
                 toggleBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -322,15 +347,12 @@
                 menu.addEventListener('click', (e) => {
                     const item = e.target.closest('li[data-format]');
                     if (!item) return;
-
                     const format = item.getAttribute('data-format');
                     if (!format) return;
-
                     setActiveFormat(format);
                     dropdown.classList.remove('open');
                 });
 
-                // Close dropdown when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!dropdown.contains(e.target)) {
                         dropdown.classList.remove('open');
@@ -338,14 +360,13 @@
                 });
             }
 
-            // 4. Answer click logic for Lessons
             answerOptions.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const isCorrect = btn.dataset.correct === 'true';
                     const flashClass = isCorrect ? 'flash-correct' : 'flash-incorrect';
 
                     btn.classList.remove('flash-correct', 'flash-incorrect');
-                    void btn.offsetWidth; // force reflow
+                    void btn.offsetWidth;
                     btn.classList.add(flashClass);
 
                     setTimeout(() => {
@@ -358,7 +379,6 @@
                 });
             });
 
-            // 5. Completion popup "Back to dashboard" button (Lessons)
             if (backToDashboardBtn && lessonCompleteModal) {
                 backToDashboardBtn.addEventListener('click', () => {
                     lessonCompleteModal.classList.remove('active');
@@ -366,13 +386,10 @@
                     if (learningPanel) learningPanel.style.display = 'none';
                     if (learningSelection) learningSelection.style.display = 'flex';
 
-                    if (dashboardTitle) dashboardTitle.style.display = '';
-
                     setActiveFormat('lessons');
                 });
             }
 
-            // 6. Video viewer popup behaviour
             function closeVideoModal() {
                 if (videoViewerModal) videoViewerModal.classList.remove('active');
                 if (videoIframe) {
@@ -400,17 +417,14 @@
                     if (learningPanel) learningPanel.style.display = 'none';
                     if (learningSelection) learningSelection.style.display = 'flex';
 
-                    if (dashboardTitle) dashboardTitle.style.display = '';
-
                     setActiveFormat('lessons');
                 });
             }
 
-            // 7. Games main button: currently intentionally does nothing
             const mainGameBtn = document.getElementById('mainGameBtn');
             if (mainGameBtn) {
                 mainGameBtn.addEventListener('click', () => {
-                    // Placeholder: future game launch logic goes here.
+                    // future game logic goes here
                 });
             }
         });
