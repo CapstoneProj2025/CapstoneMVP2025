@@ -8,170 +8,170 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="container d-flex align-items-center justify-content-between my-3">
-        <a class="brand d-flex align-items-center text-decoration-none" href="index.html" aria-label="Back to home">
-            <div class="logo d-flex align-items-center justify-content-center">CN</div>
-            <div class="name">Parent Sign Up</div>
-        </a>
-    </header>
+<header class="container d-flex align-items-center justify-content-between my-3">
+    <a class="brand d-flex align-items-center text-decoration-none" href="index.html" aria-label="Back to home">
+        <div class="logo d-flex align-items-center justify-content-center">CN</div>
+        <div class="name">Parent Sign Up</div>
+    </a>
+</header>
 
-    <main class="container">
-        <div class="signup-container parent-signup-container">
-            <h2 class="text-center mb-4">Parent/Administrator Account Creation</h2>
-            <p class="text-center text-muted mb-5">Create your account and register your first student account simultaneously.</p>
-            
-            <form id="parentSignupForm" novalidate>
-                <!-- Parent Information Section -->
-                <h4 class="section-title">Your Account Details</h4>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6">
-                        <label for="parentName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="parentName" name="parentName" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="parentEmail" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="parentEmail" name="parentEmail" required>
-                    </div>
-                    <div class="col-12">
-                        <label for="parentPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="parentPassword" name="parentPassword" required minlength="8">
-                        <div class="form-text">Must be at least 8 characters long.</div>
-                    </div>
-                </div>
+<main class="signup-page container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 signup-card">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h4 mb-2 text-center">Parent/Administrator Account Creation</h1>
+                    <p class="text-muted text-center mb-4">
+                        Create your account and register your first student simultaneously.
+                    </p>
 
-                <!-- Student Information Section -->
-                <h4 class="section-title">Child's Student Account Details</h4>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6">
-                        <label for="studentName" class="form-label">Student's Name</label>
-                        <input type="text" class="form-control" id="studentName" name="studentName" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="studentEmail" class="form-label">Student's Email (or username)</label>
-                        <input type="email" class="form-control" id="studentEmail" name="studentEmail" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="studentAge" class="form-label">Student's Age</label>
-                        <input type="number" class="form-control" id="studentAge" name="studentAge" required min="5" max="18">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="studentInterests" class="form-label">Student's Key Interest</label>
-                        <select class="form-select" id="studentInterests" name="studentInterests" required>
-                            <option value="" disabled selected>Select a primary interest</option>
-                            <option value="Physics">Physics</option>
-                            <option value="Engineering">Engineering</option>
-                            <option value="Maths">Maths</option>
-                        </select>
-                        <div class="form-text">Select the core subject area they are most excited about.</div>
-                    </div>
-                </div>
+                    <div id="signupMessage" class="alert d-none" role="alert"></div>
 
-                <div class="d-grid gap-2 mt-5">
-                    <button type="submit" class="btn btn-solid py-3" id="submitButton">
-                        Create Parent & Student Account
-                    </button>
+                    <form id="parentSignupForm" novalidate>
+                        <!-- Parent Information Section -->
+                        <h4 class="mb-3">Your Account Details</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="parentName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="parentName" name="parentName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="parentEmail" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="parentEmail" name="parentEmail" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="parentPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="parentPassword" name="parentPassword" required minlength="8">
+                                <div class="form-text">Must be at least 8 characters long.</div>
+                            </div>
+                        </div>
+
+                        <!-- Student Information Section -->
+                        <h4 class="mb-3">Child's Student Account Details</h4>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="studentName" class="form-label">Student's Full Name</label>
+                                <input type="text" class="form-control" id="studentName" name="studentName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="studentEmail" class="form-label">Student's Email (or preferred Username)</label>
+                                <input type="email" class="form-control" id="studentEmail" name="studentEmail" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="studentAge" class="form-label">Student's Age</label>
+                                <input type="number" class="form-control" id="studentAge" name="studentAge" required min="5" max="18">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="studentInterests" class="form-label">Student's Key Interest</label>
+                                <select class="form-select" id="studentInterests" name="studentInterests" required>
+                                    <option value="">Choose one...</option>
+                                    <option value="Engineering">Engineering</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Maths">Maths</option>
+                                </select>
+                                <div class="form-text">What core subject area excites them the most?</div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100" id="parentSubmitButton">
+                            Create Parent & Student Account
+                        </button>
+                    </form>
                 </div>
-            </form>
-            <div id="messageBox" class="mt-3" style="display: none;"></div>
+            </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <!-- EmailJS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- EmailJS CDN and Init -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+    (function() {
+        emailjs.init({
+            publicKey: "-HLsmBoRt7JAgdZ3E",
+        });
+    })();
+</script>
 
-    <!-- EmailJS Init -->
-    <script>
-        (function() {
-            emailjs.init({
-                publicKey: "-HLsmBoRt7JAgdZ3E",
-            });
-        })();
-    </script>
+<script>
+function displayMessage(text, type) {
+    const box = document.getElementById('signupMessage');
+    box.textContent = text;
+    box.className = 'alert alert-' + type;
+    box.classList.remove('d-none');
+}
 
-    <!-- Main Signup Logic -->
-    <script>
-        const form = document.getElementById('parentSignupForm');
-        const submitButton = document.getElementById('submitButton');
-        const messageBox = document.getElementById('messageBox');
-        
-        function displayMessage(message, type) {
-            messageBox.style.display = 'block';
-            messageBox.className = `alert alert-${type}`;
-            messageBox.innerHTML = message;
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('parentSignupForm');
+    const submitButton = document.getElementById('parentSubmitButton');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            displayMessage('Please fill in all required fields correctly.', 'danger');
+            return;
         }
 
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            messageBox.style.display = 'none';
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
 
-            if (!form.checkValidity()) {
-                form.classList.add('was-validated');
-                return;
-            }
+        submitButton.disabled = true;
+        submitButton.textContent = 'Creating Account...';
+        displayMessage('', ''); // clear previous message
 
-            submitButton.disabled = true;
-            submitButton.textContent = 'Creating Account...';
+        try {
+            const response = await fetch('http://localhost:3000/api/register-parent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
 
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
+            const result = await response.json();
 
-            const API_ENDPOINT = 'http://localhost:3000/api/register-parent';
+            if (response.ok && result.success) {
+                displayMessage('Account created! Sending welcome email to student...', 'success');
 
-            try {
-                const response = await fetch(API_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                });
+                // Send email via EmailJS
+                try {
+                    await emailjs.send(
+                        "service_poxi2u9",
+                        "template_owpjk3s",
+                        {
+                            to_email: data.studentEmail,                // ✅ student email (already correct)
+                            student_name: data.studentName,
+                            parent_name: data.parentName,
+                            student_temp_password: result.studentTempPassword // ✅ NEW
+                        }
+                    );
 
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    displayMessage('Account created! Sending student email...', 'success');
-
-                    // -------------------------------
-                    // SEND EMAIL TO STUDENT
-                    // -------------------------------
-                    try {
-                        await emailjs.send(
-                            "service_poxi2u9",
-                            "template_owpjk3s",
-                            {
-                                to_email: data.studentEmail,
-                                student_name: data.studentName,
-                                parent_name: data.parentName
-                            }
-                        );
-                        console.log("EmailJS: email sent successfully");
-                    } catch (emailErr) {
-                        console.error("EmailJS error:", emailErr);
-                        displayMessage(
-                            'Account created, but failed to send student email.',
-                            'warning'
-                        );
-                    }
-
-                    // Redirect after the email is sent
-                    window.location.href =
-                        `parentdashboard.html?id=${result.parentId}&role=${result.role}&name=${encodeURIComponent(data.parentName)}`;
-
-                } else {
-                    displayMessage(`Error: ${result.message || 'Failed to create account.'}`, 'danger');
-                    submitButton.textContent = 'Create Parent & Student Account';
-                    submitButton.disabled = false;
+                    console.log("Email sent successfully");
+                } catch (emailErr) {
+                    console.error("EmailJS error:", emailErr);
+                    displayMessage('Account created successfully, but failed to send email to student.', 'warning');
                 }
 
-            } catch (error) {
-                console.error('Network or Server Error:', error);
-                displayMessage('Network error. Please ensure the server (Node.js) is running on port 3000.', 'danger');
-                submitButton.textContent = 'Create Parent & Student Account';
-                submitButton.disabled = false;
-            }
-        });
-    </script>
+                // Redirect after short delay
+                setTimeout(() => {
+                    window.location.href =
+                        `parentdashboard.html?id=${result.parentId}&role=${encodeURIComponent(result.role)}&name=${encodeURIComponent(data.parentName)}`;
+                }, 1500);
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            } else {
+                displayMessage(result.message || 'Error: Failed to create account.', 'danger');
+            }
+        } catch (error) {
+            console.error('Network or Server Error:', error);
+            displayMessage('Network error. Please ensure the server is running on port 3000.', 'danger');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Create Parent & Student Account';
+        }
+    });
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

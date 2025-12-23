@@ -1,0 +1,49 @@
+{
+  "subject": "Maths",
+  "lessons": [
+    {
+      "id": "mat_algebra_001",
+      "title": "Solving Linear Equations",
+      "overview": "Learn how to solve equations like 2x + 3 = 11 by isolating x.",
+      "blocks": [
+        { "heading": "Concept overview", "body": "Do the same operation to both sides. Your goal is to isolate x." },
+        { "heading": "Worked example", "body": "2x + 3 = 11 → 2x = 8 → x = 4." },
+        { "heading": "Key takeaways", "bullets": ["Balance both sides", "Inverse operations", "Check your answer"] }
+      ],
+      "question": {
+        "text": "Solve: 3x - 6 = 9",
+        "answers": [
+          { "text": "x = 1", "correct": false },
+          { "text": "x = 3", "correct": false },
+          { "text": "x = 5", "correct": true },
+          { "text": "x = 7", "correct": false }
+        ]
+      }
+    }
+  ],
+  "videos": [
+    {
+      "id": "mat_vid_001",
+      "title": "Solving Linear Equations (Fast)",
+      "youtubeId": "Qyd_v6t7d3U",
+      "similar": [
+        "Two-step equations",
+        "Distributive property",
+        "Checking solutions"
+      ]
+    }
+  ],
+  "games": [
+    {
+      "id": "mat_game_001",
+      "title": "Equation Sprint",
+      "description": "Solve 10 equations quickly to build a streak.",
+      "launchUrl": "",
+      "similar": [
+        "Fraction fixer",
+        "Times table blitz",
+        "Graph match"
+      ]
+    }
+  ]
+}

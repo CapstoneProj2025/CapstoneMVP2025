@@ -1,0 +1,49 @@
+{
+  "subject": "Engineering",
+  "lessons": [
+    {
+      "id": "eng_loads_001",
+      "title": "Loads on Structures",
+      "overview": "Learn how dead loads, live loads, and environmental loads affect structural design.",
+      "blocks": [
+        { "heading": "Concept overview", "body": "Dead loads are permanent (self-weight). Live loads change (people, furniture). Environmental loads include wind and earthquakes." },
+        { "heading": "Worked example", "body": "A simple beam supports a live load in the middle. The maximum bending moment occurs at midspan." },
+        { "heading": "Key takeaways", "bullets": ["Dead load = constant", "Live load = variable", "Wind/quake loads = lateral"] }
+      ],
+      "question": {
+        "text": "Which load type is usually variable over time in a building?",
+        "answers": [
+          { "text": "Dead load", "correct": false },
+          { "text": "Live load", "correct": true },
+          { "text": "Self-weight", "correct": false },
+          { "text": "Permanent fixtures", "correct": false }
+        ]
+      }
+    }
+  ],
+  "videos": [
+    {
+      "id": "eng_vid_001",
+      "title": "Civil Engineering: Loads on Structures",
+      "youtubeId": "e6NVVuCZu-Q",
+      "similar": [
+        "Bending moments and shear forces (intro)",
+        "How trusses carry load",
+        "Beam deflection basics"
+      ]
+    }
+  ],
+  "games": [
+    {
+      "id": "eng_game_001",
+      "title": "Build Your Own Bridge",
+      "description": "Drag-and-drop a bridge, then test it under load.",
+      "launchUrl": "",
+      "similar": [
+        "Truss builder challenge",
+        "Tower stability sandbox",
+        "Load path puzzle"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "subject": "Physics",
+  "lessons": [
+    {
+      "id": "phy_forces_001",
+      "title": "Forces and Free-Body Diagrams",
+      "overview": "Learn how to represent forces acting on an object using a free-body diagram (FBD).",
+      "blocks": [
+        { "heading": "Concept overview", "body": "A free-body diagram isolates an object and shows all external forces: gravity, normal force, friction, tension." },
+        { "heading": "Worked example", "body": "A box on a flat floor: weight down, normal up. If pulled right, tension right and friction left." },
+        { "heading": "Key takeaways", "bullets": ["FBD = isolate the object", "Only external forces", "Direction matters"] }
+      ],
+      "question": {
+        "text": "On a box sitting still on a table, which force balances the weight?",
+        "answers": [
+          { "text": "Friction", "correct": false },
+          { "text": "Normal force", "correct": true },
+          { "text": "Tension", "correct": false },
+          { "text": "Air resistance", "correct": false }
+        ]
+      }
+    }
+  ],
+  "videos": [
+    {
+      "id": "phy_vid_001",
+      "title": "Free-Body Diagrams (Beginner)",
+      "youtubeId": "s1p8H_y8H-0",
+      "similar": [
+        "Newton’s laws overview",
+        "Friction explained",
+        "Solving force problems"
+      ]
+    }
+  ],
+  "games": [
+    {
+      "id": "phy_game_001",
+      "title": "Force Match",
+      "description": "Choose the correct set of forces for different scenarios.",
+      "launchUrl": "",
+      "similar": [
+        "Newton’s 2nd Law racer",
+        "Friction lab",
+        "Projectile aim trainer"
+      ]
+    }
+  ]
+}

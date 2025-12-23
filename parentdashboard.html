@@ -4,63 +4,141 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Parent Dashboard</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .dashboard-container { 
-            max-width: 900px; 
-            margin: 50px auto; 
-            padding: 30px; 
-            background: var(--white); 
-            border-radius: var(--radius); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-        }
-    </style>
 </head>
 <body>
-    <header class="container d-flex align-items-center justify-content-between my-3">
-        <div class="brand d-flex align-items-center">
-            <div class="logo">CN</div>
-            <div class="name">Admin Dashboard</div>
+
+<!-- HEADER (unchanged) -->
+<header class="container d-flex align-items-center justify-content-between my-3">
+    <a class="brand" href="index.html">
+        <div class="logo">CN</div>
+        <div class="name">Parent Dashboard</div>
+    </a>
+
+    <nav class="desktop-nav d-flex gap-3">
+        <a class="nav-link" href="#">Premium</a>
+        <a class="nav-link" href="#">Courses</a>
+        <a class="nav-link" href="#">Contact</a>
+    </nav>
+</header>
+
+<!-- DASHBOARD -->
+<main class="parent-dashboard-container">
+    <div class="parent-dashboard-shell">
+
+        <div class="row g-3">
+
+            <!-- LEFT COLUMN -->
+            <div class="col-lg-3">
+                <div class="parent-dashboard-card text-center">
+
+                    <div class="upgrade-placeholder"></div>
+                    <p class="fw-semibold mb-2">Want more out of x?</p>
+                    <button class="btn btn-solid btn-pill">Upgrade to Premium</button>
+
+                    <hr class="my-3">
+                    <h6 class="fw-bold mb-2">LEAGUE TABLE</h6>
+                    <div class="league-row">
+                        <span>BRONZE</span>
+                        <span>SILVER</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- MIDDLE COLUMN -->
+            <div class="col-lg-6">
+                <div class="parent-dashboard-card">
+
+                    <div class="student-switcher mb-3">
+                        <div class="student-avatar"></div>
+                        <div class="student-switcher-name" id="studentName">Matthew</div>
+
+                        <div class="dropdown ms-auto">
+                            <button class="btn btn-outline-secondary btn-pill dropdown-toggle" data-bs-toggle="dropdown">
+                                Switch
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Matthew</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-8">
+                            <div class="parent-dashboard-card h-100">
+                                <div class="analytics-placeholder">
+                                    Chart for time spent on site
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="parent-dashboard-card h-100">
+                                <div class="activity-placeholder">
+                                    Recent Activity
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="parent-dashboard-card h-100">
+                                <div class="settings-placeholder">
+                                    Settings
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="parent-dashboard-card h-100">
+                                <div class="progress-placeholder">
+                                    Progress Overview
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="col-lg-3">
+                <div class="parent-dashboard-card text-center">
+
+                    <p class="mb-1">
+                        <strong id="streakStudentName">Matthew</strong> has a
+                    </p>
+                    <div class="streak-number" id="dayStreak">11</div>
+                    <div class="streak-label">DAY STREAK</div>
+
+                    <hr class="my-3">
+                    <div class="feedback-placeholder">
+                        <div class="fw-bold">FEEDBACK FORM</div>
+                        <div class="small">(Coming soon)</div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-        <a class="btn btn-primary" href="index.html">Log Out</a>
-    </header>
 
-    <main class="container">
-        <div class="dashboard-container">
-            <h1 class="mb-4">Welcome, <span id="userName">Parent</span>!</h1>
-            <p class="lead">This is your Parent/Administrator Dashboard. Your account details have been successfully saved to MySQL.</p>
-            
-            <h4 class="section-title mt-5">Registration Details Stored</h4>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>User ID:</strong> <span id="userId">N/A</span></li>
-                <li class="list-group-item"><strong>Role:</strong> <span id="userRole">N/A</span></li>
-                <li class="list-group-item"><strong>Account Name:</strong> <span id="detailName">N/A</span></li>
-                <li class="list-group-item alert alert-info mt-3">
-                    In a real application, we would query the database here (via the server) to fetch your student's full details!
-                </li>
-            </ul>
-        </div>
-    </main>
+    </div>
+</main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-            const role = params.get('role');
-            const name = params.get('name');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-            if (id && role && name) {
-                document.getElementById('userName').textContent = name;
-                document.getElementById('userId').textContent = id;
-                document.getElementById('userRole').textContent = role.charAt(0).toUpperCase() + role.slice(1);
-                document.getElementById('detailName').textContent = name;
-            } else {
-                document.getElementById('userName').textContent = 'Guest';
-                document.getElementById('userId').textContent = 'Error: Data missing from URL.';
-            }
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const studentData = {
+        name: "Matthew",
+        streak: 11
+    };
+
+    document.getElementById("studentName").textContent = studentData.name;
+    document.getElementById("streakStudentName").textContent = studentData.name;
+    document.getElementById("dayStreak").textContent = studentData.streak;
+</script>
+
 </body>
 </html>
