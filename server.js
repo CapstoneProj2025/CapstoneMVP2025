@@ -57,7 +57,6 @@ async function getStudentByEmail(conn, email) {
 
 // NZ date string (YYYY-MM-DD) based on Pacific/Auckland
 function nzDateString(date = new Date()) {
-  // Using Intl so DST is handled automatically
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Pacific/Auckland",
     year: "numeric",
@@ -65,21 +64,20 @@ function nzDateString(date = new Date()) {
     day: "2-digit",
   }).formatToParts(date);
 
-  const y = parts.find(p => p.type === "year")?.value;
-  const m = parts.find(p => p.type === "month")?.value;
-  const d = parts.find(p => p.type === "day")?.value;
+  const y = parts.find((p) => p.type === "year")?.value;
+  const m = parts.find((p) => p.type === "month")?.value;
+  const d = parts.find((p) => p.type === "day")?.value;
   return `${y}-${m}-${d}`;
 }
 
 // Seconds until next midnight (NZ time)
 function secondsUntilNextNZMidnight(now = new Date()) {
-  // We compute "tomorrow 00:00" in NZ local terms.
   const nzNow = new Date(
     now.toLocaleString("en-US", { timeZone: "Pacific/Auckland" })
   );
 
   const next = new Date(nzNow);
-  next.setHours(24, 0, 0, 0); // next midnight in NZ-local Date object
+  next.setHours(24, 0, 0, 0);
 
   const diffMs = next.getTime() - nzNow.getTime();
   return Math.max(0, Math.floor(diffMs / 1000));
@@ -87,7 +85,7 @@ function secondsUntilNextNZMidnight(now = new Date()) {
 
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
-// -------------------- AUTH / REGISTER (unchanged logic) --------------------
+// -------------------- AUTH / REGISTER --------------------
 app.post("/api/register-parent", async (req, res) => {
   const {
     parentName,
@@ -99,8 +97,17 @@ app.post("/api/register-parent", async (req, res) => {
     studentInterests,
   } = req.body;
 
-  if (!parentName || !parentEmail || !parentPassword || !studentName || !studentEmail || !studentAge) {
-    return res.status(400).json({ success: false, message: "Missing required fields." });
+  if (
+    !parentName ||
+    !parentEmail ||
+    !parentPassword ||
+    !studentName ||
+    !studentEmail ||
+    !studentAge
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing required fields." });
   }
 
   let conn;
@@ -112,14 +119,18 @@ app.post("/api/register-parent", async (req, res) => {
     if (existingParent) {
       await conn.rollback();
       conn.release();
-      return res.status(409).json({ success: false, message: "Parent email already exists." });
+      return res
+        .status(409)
+        .json({ success: false, message: "Parent email already exists." });
     }
 
     const existingStudent = await getStudentByEmail(conn, studentEmail);
     if (existingStudent) {
       await conn.rollback();
       conn.release();
-      return res.status(409).json({ success: false, message: "Student email already exists." });
+      return res
+        .status(409)
+        .json({ success: false, message: "Student email already exists." });
     }
 
     const parentHash = await bcrypt.hash(parentPassword, 10);
@@ -135,7 +146,16 @@ app.post("/api/register-parent", async (req, res) => {
 
     const [studentInsert] = await conn.execute(
       "INSERT INTO students (full_name, email, password_hash, age, interest, parent_id, streak_days, last_streak_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-      [studentName, studentEmail, studentHash, Number(studentAge), studentInterests, parentId, 0, null]
+      [
+        studentName,
+        studentEmail,
+        studentHash,
+        Number(studentAge),
+        studentInterests,
+        parentId,
+        0,
+        null,
+      ]
     );
     const studentId = studentInsert.insertId;
 
@@ -152,15 +172,22 @@ app.post("/api/register-parent", async (req, res) => {
     });
   } catch (err) {
     if (conn) {
-      try { await conn.rollback(); } catch {}
+      try {
+        await conn.rollback();
+      } catch {}
       conn.release();
     }
     console.error("❌ Error in /api/register-parent:", err);
 
     if (err.code === "ER_DUP_ENTRY") {
-      return res.status(409).json({ success: false, message: "Email already exists." });
+      return res
+        .status(409)
+        .json({ success: false, message: "Email already exists." });
     }
-    return res.status(500).json({ success: false, message: "Server error during parent registration." });
+    return res.status(500).json({
+      success: false,
+      message: "Server error during parent registration.",
+    });
   }
 });
 
@@ -174,8 +201,16 @@ app.post("/api/register-student", async (req, res) => {
     parentId,
   } = req.body;
 
-  if (!studentName || !studentEmail || !studentPassword || !studentAge || !studentInterests) {
-    return res.status(400).json({ success: false, message: "Missing required fields." });
+  if (
+    !studentName ||
+    !studentEmail ||
+    !studentPassword ||
+    !studentAge ||
+    !studentInterests
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing required fields." });
   }
 
   let conn;
@@ -185,7 +220,9 @@ app.post("/api/register-student", async (req, res) => {
     const existingStudent = await getStudentByEmail(conn, studentEmail);
     if (existingStudent) {
       conn.release();
-      return res.status(409).json({ success: false, message: "Email already exists." });
+      return res
+        .status(409)
+        .json({ success: false, message: "Email already exists." });
     }
 
     const hash = await bcrypt.hash(studentPassword, 10);
@@ -218,16 +255,23 @@ app.post("/api/register-student", async (req, res) => {
     console.error("❌ Error in /api/register-student:", err);
 
     if (err.code === "ER_DUP_ENTRY") {
-      return res.status(409).json({ success: false, message: "Email already exists." });
+      return res
+        .status(409)
+        .json({ success: false, message: "Email already exists." });
     }
-    return res.status(500).json({ success: false, message: "Server error during student registration." });
+    return res.status(500).json({
+      success: false,
+      message: "Server error during student registration.",
+    });
   }
 });
 
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ success: false, message: "Email and password required." });
+    return res
+      .status(400)
+      .json({ success: false, message: "Email and password required." });
   }
 
   let conn;
@@ -239,7 +283,10 @@ app.post("/api/login", async (req, res) => {
       const ok = await bcrypt.compare(password, student.password_hash);
       conn.release();
 
-      if (!ok) return res.status(401).json({ success: false, message: "Invalid password." });
+      if (!ok)
+        return res
+          .status(401)
+          .json({ success: false, message: "Invalid password." });
 
       return res.json({
         success: true,
@@ -258,7 +305,10 @@ app.post("/api/login", async (req, res) => {
       const ok = await bcrypt.compare(password, parent.password_hash || "");
       conn.release();
 
-      if (!ok) return res.status(401).json({ success: false, message: "Invalid password." });
+      if (!ok)
+        return res
+          .status(401)
+          .json({ success: false, message: "Invalid password." });
 
       return res.json({
         success: true,
@@ -270,18 +320,24 @@ app.post("/api/login", async (req, res) => {
     }
 
     conn.release();
-    return res.status(404).json({ success: false, message: "No account found for that email." });
+    return res
+      .status(404)
+      .json({ success: false, message: "No account found for that email." });
   } catch (err) {
     if (conn) conn.release();
     console.error("❌ Error in /api/login:", err);
-    return res.status(500).json({ success: false, message: "Server error during login." });
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error during login." });
   }
 });
 
 app.get("/api/parent-dashboard-data", async (req, res) => {
   const parentId = Number(req.query.parentId);
   if (!parentId) {
-    return res.status(400).json({ success: false, message: "parentId is required." });
+    return res
+      .status(400)
+      .json({ success: false, message: "parentId is required." });
   }
 
   let conn;
@@ -295,7 +351,9 @@ app.get("/api/parent-dashboard-data", async (req, res) => {
     const parent = pRows[0];
     if (!parent) {
       conn.release();
-      return res.status(404).json({ success: false, message: "Parent not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Parent not found." });
     }
 
     const [sRows] = await conn.execute(
@@ -356,16 +414,20 @@ app.get("/api/content", async (req, res) => {
     return res.json({ success: true, subject, format, item: list[safeIndex] });
   } catch (err) {
     console.error("❌ Error in /api/content:", err);
-    return res.status(500).json({ success: false, message: "Server error loading content." });
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error loading content." });
   }
 });
 
-// -------------------- STREAK ENDPOINTS (ONCE PER DAY + COUNTDOWN) --------------------
+// -------------------- STREAK ENDPOINTS (ONCE PER DAY + RESET IF MISSED DAY + COUNTDOWN) --------------------
 
 app.get("/api/streak", async (req, res) => {
   const studentId = Number(req.query.studentId);
   if (!studentId) {
-    return res.status(400).json({ success: false, message: "studentId is required." });
+    return res
+      .status(400)
+      .json({ success: false, message: "studentId is required." });
   }
 
   let conn;
@@ -392,13 +454,16 @@ app.get("/api/streak", async (req, res) => {
   } catch (err) {
     if (conn) conn.release();
     console.error("❌ Error in /api/streak:", err);
-    return res.status(500).json({ success: false, message: "Server error loading streak." });
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error loading streak." });
   }
 });
 
 /**
  * POST /api/streak/increment
- * Only increments ONCE per NZ calendar day.
+ * - Only increments ONCE per NZ calendar day
+ * - If user misses a full day (i.e. last_streak_date is older than yesterday), streak resets to 1
  * Body: { studentId: 123, activity: "lesson"|"video"|"game" }
  */
 app.post("/api/streak/increment", async (req, res) => {
@@ -406,7 +471,9 @@ app.post("/api/streak/increment", async (req, res) => {
   const activity = String(req.body.activity || "").trim().toLowerCase();
 
   if (!studentId) {
-    return res.status(400).json({ success: false, message: "studentId is required." });
+    return res
+      .status(400)
+      .json({ success: false, message: "studentId is required." });
   }
 
   const allowed = ["lesson", "video", "game"];
@@ -414,66 +481,81 @@ app.post("/api/streak/increment", async (req, res) => {
     return res.status(400).json({ success: false, message: "Invalid activity." });
   }
 
-  const todayNZ = nzDateString(new Date());
+  // NZ today & yesterday strings
+  const now = new Date();
+  const nzNow = new Date(now.toLocaleString("en-US", { timeZone: "Pacific/Auckland" }));
+  const todayNZ = nzDateString(nzNow);
+
+  const y = new Date(nzNow);
+  y.setDate(y.getDate() - 1);
+  const yesterdayNZ = nzDateString(y);
 
   let conn;
   try {
     conn = await pool.getConnection();
 
-    // Read current state
-    const [rows] = await conn.execute(
+    // Read current state (for incremented flag)
+    const [beforeRows] = await conn.execute(
       "SELECT streak_days, last_streak_date FROM students WHERE id = ?",
       [studentId]
     );
 
-    if (!rows[0]) {
+    if (!beforeRows[0]) {
       conn.release();
       return res.status(404).json({ success: false, message: "Student not found." });
     }
 
-    const currentStreak = rows[0].streak_days || 0;
-    const lastDate = rows[0].last_streak_date; // may be null
-
-    // If already incremented today (NZ date), do nothing.
-    if (lastDate === todayNZ) {
-      conn.release();
-      return res.json({
-        success: true,
-        studentId,
-        streakDays: currentStreak,
-        incremented: false,
-        reason: "already_incremented_today",
-        secondsUntilNextIncrement: secondsUntilNextNZMidnight(new Date()),
-        nzToday: todayNZ,
-      });
-    }
-
-    // Not incremented today -> increment and set last_streak_date
+    // Atomic update inside MySQL:
+    // - last_streak_date == todayNZ -> do nothing
+    // - last_streak_date == yesterdayNZ -> streak_days + 1
+    // - else (null/older) -> reset streak_days to 1
     await conn.execute(
-      "UPDATE students SET streak_days = COALESCE(streak_days, 0) + 1, last_streak_date = ? WHERE id = ?",
-      [todayNZ, studentId]
+      `
+      UPDATE students
+      SET
+        streak_days = CASE
+          WHEN last_streak_date = ? THEN COALESCE(streak_days, 0)
+          WHEN last_streak_date = ? THEN COALESCE(streak_days, 0) + 1
+          ELSE 1
+        END,
+        last_streak_date = CASE
+          WHEN last_streak_date = ? THEN last_streak_date
+          ELSE ?
+        END
+      WHERE id = ?
+      `,
+      [todayNZ, yesterdayNZ, todayNZ, todayNZ, studentId]
     );
 
-    const [after] = await conn.execute(
+    // Fetch after
+    const [afterRows] = await conn.execute(
       "SELECT streak_days, last_streak_date FROM students WHERE id = ?",
       [studentId]
     );
 
     conn.release();
 
+    const beforeLast = beforeRows[0].last_streak_date;
+    const afterLast = afterRows[0].last_streak_date;
+
+    // If the last date changed to today, we incremented (either +1 or reset->1)
+    const incremented = (afterLast === todayNZ) && (beforeLast !== todayNZ);
+
     return res.json({
       success: true,
       studentId,
-      streakDays: after[0].streak_days || 0,
-      lastStreakDate: after[0].last_streak_date,
-      incremented: true,
+      streakDays: afterRows[0].streak_days || 0,
+      lastStreakDate: afterRows[0].last_streak_date,
+      incremented,
       secondsUntilNextIncrement: secondsUntilNextNZMidnight(new Date()),
       nzToday: todayNZ,
     });
   } catch (err) {
     if (conn) conn.release();
     console.error("❌ Error in /api/streak/increment:", err);
-    return res.status(500).json({ success: false, message: "Server error updating streak." });
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error updating streak." });
   }
 });
 

@@ -218,10 +218,29 @@
         </div>
 
         <div class="viewer-body">
-          <div class="game-viewer-hero">
-            <div class="game-viewer-hero-title" id="gameViewerHeroTitle">Click Play to begin</div>
-            <button id="gamePlayBtn" class="btn btn-primary btn-pill">Play</button>
-            <div class="text-muted small mt-2">(Play is a placeholder for now)</div>
+          <!-- Embedded game iframe (replaces placeholder play area) -->
+          <div class="d-flex justify-content-center">
+            <iframe
+              id="gameIframe"
+              src=""
+              width="800"
+              height="600"
+              allowfullscreen
+              loading="lazy"
+              style="border:0; max-width: 100%;"
+              title="Game"
+            ></iframe>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-end mt-2">
+            <a id="openGameInNewTab"
+               class="btn btn-outline-secondary btn-pill"
+               href="#"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="display:none;">
+              Open in new tab
+            </a>
           </div>
 
           <div class="viewer-actions">
@@ -303,7 +322,6 @@
           countdownSeconds = Math.max(0, countdownSeconds - 1);
           if (streakCountdown) streakCountdown.textContent = formatCountdown(countdownSeconds);
 
-          // When we hit 0, next day has arrived — refresh from server so it resets cleanly
           if (countdownSeconds === 0) {
             loadStreak();
           }
@@ -328,8 +346,6 @@
           const seconds = Number(data.secondsUntilNextIncrement ?? 0);
           startCountdown(seconds);
 
-          // If already incremented today, hint changes
-          // (We can infer from lastStreakDate == nzToday if server returns both)
           const alreadyToday = data.lastStreakDate && data.nzToday && data.lastStreakDate === data.nzToday;
           if (streakHint) {
             streakHint.textContent = alreadyToday
@@ -356,7 +372,6 @@
 
           if (streakCount) streakCount.textContent = String(data.streakDays ?? 0);
 
-          // Always refresh countdown from server response (server uses NZ midnight)
           if (typeof data.secondsUntilNextIncrement === "number") {
             startCountdown(data.secondsUntilNextIncrement);
           } else {
@@ -429,6 +444,8 @@
       const gameViewerModal = document.getElementById("gameViewerModal");
       const exitGameViewingBtn = document.getElementById("exitGameViewingBtn");
       const gameBackToDashboardBtn = document.getElementById("gameBackToDashboardBtn");
+      const gameIframe = document.getElementById("gameIframe");
+      const openGameInNewTab = document.getElementById("openGameInNewTab");
 
       let currentFormat = "lessons";
       let currentSubject = subjectSelect ? subjectSelect.value : "Engineering";
@@ -540,10 +557,26 @@
 
       function renderGameViewer(item) {
         if (!item) return;
+
         const titleEl = document.getElementById("gameViewerTitle");
         const descEl = document.getElementById("gameViewerDesc");
         if (titleEl) titleEl.textContent = item.title || "Game";
         if (descEl) descEl.textContent = item.description || "";
+
+        if (gameIframe) {
+          gameIframe.src = item.url || "";
+          gameIframe.title = item.title || "Game";
+        }
+
+        if (openGameInNewTab) {
+          if (item.url) {
+            openGameInNewTab.href = item.url;
+            openGameInNewTab.style.display = "inline-flex";
+          } else {
+            openGameInNewTab.href = "#";
+            openGameInNewTab.style.display = "none";
+          }
+        }
       }
 
       function renderLessonMinis() {
@@ -773,6 +806,7 @@
       }
 
       function closeGameModal() {
+        if (gameIframe) gameIframe.src = "";
         if (gameViewerModal) gameViewerModal.classList.remove("active");
       }
 

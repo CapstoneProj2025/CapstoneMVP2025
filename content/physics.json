@@ -1,49 +1,63 @@
 {
-  "subject": "Physics",
   "lessons": [
     {
-      "id": "phy_forces_001",
-      "title": "Forces and Free-Body Diagrams",
-      "overview": "Learn how to represent forces acting on an object using a free-body diagram (FBD).",
+      "title": "Forces and Motion",
+      "overview": "Understand how forces change motion.",
       "blocks": [
-        { "heading": "Concept overview", "body": "A free-body diagram isolates an object and shows all external forces: gravity, normal force, friction, tension." },
-        { "heading": "Worked example", "body": "A box on a flat floor: weight down, normal up. If pulled right, tension right and friction left." },
-        { "heading": "Key takeaways", "bullets": ["FBD = isolate the object", "Only external forces", "Direction matters"] }
+        {
+          "heading": "Forces",
+          "body": "A force is a push or pull."
+        },
+        {
+          "heading": "Motion",
+          "body": "Motion changes when a net force acts.",
+          "bullets": [
+            "Speed can increase or decrease",
+            "Direction can change",
+            "Balanced forces mean no change in motion"
+          ]
+        }
       ],
       "question": {
-        "text": "On a box sitting still on a table, which force balances the weight?",
+        "text": "What happens if forces are balanced?",
         "answers": [
-          { "text": "Friction", "correct": false },
-          { "text": "Normal force", "correct": true },
-          { "text": "Tension", "correct": false },
-          { "text": "Air resistance", "correct": false }
+          { "text": "Motion does not change", "correct": true },
+          { "text": "Object always speeds up", "correct": false },
+          { "text": "Object always stops", "correct": false },
+          { "text": "Gravity disappears", "correct": false }
         ]
       }
     }
   ],
   "videos": [
     {
-      "id": "phy_vid_001",
-      "title": "Free-Body Diagrams (Beginner)",
-      "youtubeId": "s1p8H_y8H-0",
+      "title": "Newton’s Laws Explained",
+      "youtubeId": "kKKM8Y-u7ds",
       "similar": [
-        "Newton’s laws overview",
-        "Friction explained",
-        "Solving force problems"
+        "Forces in Everyday Life",
+        "Acceleration Basics",
+        "Friction and Motion"
       ]
     }
   ],
   "games": [
     {
-      "id": "phy_game_001",
-      "title": "Force Match",
-      "description": "Choose the correct set of forces for different scenarios.",
-      "launchUrl": "",
-      "similar": [
-        "Newton’s 2nd Law racer",
-        "Friction lab",
-        "Projectile aim trainer"
-      ]
+      "title": "Forces and Motion: Basics — PhET",
+      "description": "Investigate net force, friction, and how forces affect motion.",
+      "provider": "PhET",
+      "url": "https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_en.html"
+    },
+    {
+      "title": "Energy Skate Park — PhET",
+      "description": "Explore kinetic and potential energy on a skateboard track.",
+      "provider": "PhET",
+      "url": "https://phet.colorado.edu/en/simulation/energy-skate-park"
+    },
+    {
+      "title": "Geometric Optics — PhET",
+      "description": "Experiment with lenses, mirrors, and light rays.",
+      "provider": "PhET",
+      "url": "https://phet.colorado.edu/en/simulations/geometric-optics"
     }
   ]
 }

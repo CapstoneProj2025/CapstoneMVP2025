@@ -1,49 +1,63 @@
 {
-  "subject": "Maths",
   "lessons": [
     {
-      "id": "mat_algebra_001",
-      "title": "Solving Linear Equations",
-      "overview": "Learn how to solve equations like 2x + 3 = 11 by isolating x.",
+      "title": "Lines and Graphs",
+      "overview": "Learn how straight-line graphs work and what slope means.",
       "blocks": [
-        { "heading": "Concept overview", "body": "Do the same operation to both sides. Your goal is to isolate x." },
-        { "heading": "Worked example", "body": "2x + 3 = 11 → 2x = 8 → x = 4." },
-        { "heading": "Key takeaways", "bullets": ["Balance both sides", "Inverse operations", "Check your answer"] }
+        {
+          "heading": "What is a straight line?",
+          "body": "A straight line graph shows a constant rate of change."
+        },
+        {
+          "heading": "Slope (gradient)",
+          "body": "Slope tells you how steep the line is.",
+          "bullets": [
+            "Positive slope goes up",
+            "Negative slope goes down",
+            "Zero slope is flat"
+          ]
+        }
       ],
       "question": {
-        "text": "Solve: 3x - 6 = 9",
+        "text": "What does slope represent?",
         "answers": [
-          { "text": "x = 1", "correct": false },
-          { "text": "x = 3", "correct": false },
-          { "text": "x = 5", "correct": true },
-          { "text": "x = 7", "correct": false }
+          { "text": "How steep the line is", "correct": true },
+          { "text": "The colour of the line", "correct": false },
+          { "text": "The size of the graph", "correct": false },
+          { "text": "The number of axes", "correct": false }
         ]
       }
     }
   ],
   "videos": [
     {
-      "id": "mat_vid_001",
-      "title": "Solving Linear Equations (Fast)",
-      "youtubeId": "Qyd_v6t7d3U",
+      "title": "Understanding Slope",
+      "youtubeId": "xwW6wqL-2pY",
       "similar": [
-        "Two-step equations",
-        "Distributive property",
-        "Checking solutions"
+        "Graphing Basics",
+        "Lines in Real Life",
+        "Slope Practice"
       ]
     }
   ],
   "games": [
     {
-      "id": "mat_game_001",
-      "title": "Equation Sprint",
-      "description": "Solve 10 equations quickly to build a streak.",
-      "launchUrl": "",
-      "similar": [
-        "Fraction fixer",
-        "Times table blitz",
-        "Graph match"
-      ]
+      "title": "Graphing Lines — PhET",
+      "description": "Explore slope and intercept by graphing lines interactively.",
+      "provider": "PhET",
+      "url": "https://phet.colorado.edu/sims/html/graphing-lines/latest/graphing-lines_en.html"
+    },
+    {
+      "title": "Fractions: Intro — PhET",
+      "description": "Learn fractions using visual models and interactive tools.",
+      "provider": "PhET",
+      "url": "https://phet.colorado.edu/en/simulation/fractions-intro"
+    },
+    {
+      "title": "Area Builder — PhET",
+      "description": "Build shapes and understand area with interactive tiles.",
+      "provider": "PhET",
+      "url": "https://phet.colorado.edu/en/simulation/area-builder"
     }
   ]
 }
