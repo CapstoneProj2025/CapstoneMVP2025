@@ -1,62 +1,107 @@
 {
   "lessons": [
     {
-      "title": "Forces in Structures",
-      "overview": "Learn how loads travel through structures and why balance matters.",
+      "title": "Introduction to Circuits",
+      "overview": "Learn the fundamentals of electrical circuits, voltage, current, and resistance.",
       "blocks": [
         {
-          "heading": "Loads",
-          "body": "Loads are forces applied to a structure."
+          "heading": "What is a Circuit?",
+          "content": "A circuit is a closed path that allows electricity to flow from a power source, through components, and back to the source. A simple circuit needs a power source (battery), conductors (wires), and a load (light bulb, motor, etc.)."
         },
         {
-          "heading": "Equilibrium",
-          "body": "Structures must balance forces to stay stable.",
-          "bullets": [
-            "Sum of forces = 0",
-            "Sum of moments = 0"
-          ]
+          "heading": "Ohm's Law",
+          "content": "Ohm's Law describes the relationship between voltage (V), current (I), and resistance (R): V = IR. Voltage is measured in Volts, current in Amperes, and resistance in Ohms (Ω). If voltage increases, current increases proportionally."
+        },
+        {
+          "heading": "Series vs Parallel Circuits",
+          "content": "In series circuits, current flows through one path. If one component fails, the entire circuit breaks. In parallel circuits, current has multiple paths. If one path breaks, others continue working. Home wiring uses parallel circuits."
         }
       ],
-      "question": {
-        "text": "What is required for equilibrium?",
-        "answers": [
-          { "text": "Forces and moments balance", "correct": true },
-          { "text": "Only gravity acts", "correct": false },
-          { "text": "No forces exist", "correct": false },
-          { "text": "The structure is heavy", "correct": false }
-        ]
+      "quiz": {
+        "question": "A circuit has 12V and 3Ω resistance. What is the current?",
+        "answers": ["2 A", "4 A", "9 A", "36 A"],
+        "correctIndex": 1
+      }
+    },
+    {
+      "title": "Simple Machines and Mechanical Advantage",
+      "overview": "Discover how simple machines make work easier by trading force for distance.",
+      "blocks": [
+        {
+          "heading": "The Six Simple Machines",
+          "content": "The six classical simple machines are: lever, wheel and axle, pulley, inclined plane, wedge, and screw. All complex machines are combinations of these basic types. They make work easier by changing the direction or magnitude of force."
+        },
+        {
+          "heading": "Mechanical Advantage",
+          "content": "Mechanical advantage (MA) is the ratio of output force to input force. MA = Output Force / Input Force. A lever with MA = 3 means you can lift 300N with only 100N of force. However, you must move your end 3 times farther."
+        },
+        {
+          "heading": "Efficiency",
+          "content": "No machine is 100% efficient due to friction and other energy losses. Efficiency = (Useful Work Out / Total Work In) × 100%. A 75% efficient machine converts 75% of input energy to useful work, losing 25% to heat and friction."
+        }
+      ],
+      "quiz": {
+        "question": "A lever allows you to lift 600N with 200N of force. What is its mechanical advantage?",
+        "answers": ["2", "3", "400", "800"],
+        "correctIndex": 1
+      }
+    },
+    {
+      "title": "Structures and Forces",
+      "overview": "Understand how engineers design structures to withstand different types of forces.",
+      "blocks": [
+        {
+          "heading": "Types of Forces on Structures",
+          "content": "Structures experience tension (pulling), compression (pushing), shear (sliding), torsion (twisting), and bending forces. Cables experience tension, columns experience compression, and beams experience both."
+        },
+        {
+          "heading": "Strength of Shapes",
+          "content": "Triangles are the strongest shape because they can't be deformed without changing the length of sides. This is why bridges and towers use triangular trusses. Arches distribute weight effectively by converting vertical forces to compression."
+        },
+        {
+          "heading": "Center of Gravity",
+          "content": "The center of gravity is the point where all weight appears to act. Objects with low centers of gravity are more stable. Wide bases and low centers of gravity prevent tipping. This principle is crucial in vehicle and building design."
+        }
+      ],
+      "quiz": {
+        "question": "What is the strongest geometric shape for building structures?",
+        "answers": ["Square", "Circle", "Triangle", "Hexagon"],
+        "correctIndex": 2
       }
     }
   ],
   "videos": [
     {
-      "title": "Understanding Torque",
-      "youtubeId": "3Q9h7cA5S1s",
-      "similar": [
-        "Moments in Structures",
-        "Levers and Balance",
-        "Static Equilibrium"
-      ]
+      "title": "How Do Electric Circuits Work?",
+      "youtubeId": "mc979OhitAg",
+      "description": "Clear explanation of circuits, voltage, and current"
+    },
+    {
+      "title": "Simple Machines - Bill Nye",
+      "youtubeId": "jl1u434zKNo",
+      "description": "Fun introduction to levers, pulleys, and mechanical advantage"
+    },
+    {
+      "title": "Engineering Basics: Structures",
+      "youtubeId": "qK9TX7hS2kA",
+      "description": "How engineers design strong and stable structures"
     }
   ],
   "games": [
     {
-      "title": "Balancing Act (Torque & Levers) — PhET",
-      "description": "Explore torque and balance using levers and weights.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/sims/html/balancing-act/latest/balancing-act_en.html"
+      "title": "Circuit Construction Kit — PhET",
+      "url": "https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_en.html",
+      "description": "Build and experiment with circuits"
+    },
+    {
+      "title": "Balancing Act — PhET",
+      "url": "https://phet.colorado.edu/sims/html/balancing-act/latest/balancing-act_en.html",
+      "description": "Explore balance and leverage with a seesaw"
     },
     {
       "title": "Forces and Motion: Basics — PhET",
-      "description": "Investigate net force, friction, and how forces affect motion.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_en.html"
-    },
-    {
-      "title": "2D Truss Simulator (Bridge/Truss) — JHU EI",
-      "description": "Design a simple truss and explore forces in members.",
-      "provider": "JHU Engineering Innovation",
-      "url": "https://ei.jhu.edu/truss-simulator/"
+      "url": "https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_en.html",
+      "description": "Learn about pushing, pulling, and friction"
     }
   ]
 }

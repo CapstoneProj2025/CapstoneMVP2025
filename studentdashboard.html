@@ -17,7 +17,7 @@
     </a>
 
     <div class="d-flex align-items-center gap-3">
-      <button id="settingsButton" class="btn btn-outline-secondary btn-pill">Settings</button>
+      <button id="settingsButton" class="btn btn-outline-secondary btn-pill">🔥 My Progress</button>
     </div>
   </header>
 
@@ -46,7 +46,7 @@
         <div class="selection-card">
           <div class="selection-top-bar">
             <div></div>
-            <button id="settingsIcon" class="settings-icon" title="Settings">⚙️</button>
+            <button id="settingsIcon" class="settings-icon" title="My Progress">🔥</button>
           </div>
 
           <div class="selection-title">Choose what to do</div>
@@ -201,8 +201,9 @@
     <!-- LESSON COMPLETE MODAL -->
     <div id="lessonCompleteModal" class="lesson-complete-modal">
       <div class="lesson-complete-card">
-        <h3 class="mb-2">Lesson Complete ✅</h3>
-        <p class="text-muted mb-3">Nice work. Head back to the dashboard to choose the next activity.</p>
+        <div class="lesson-complete-icon">🎉</div>
+        <div class="lesson-complete-title">Great Job!</div>
+        <div class="lesson-complete-subtitle">You completed this lesson.</div>
         <button id="backToDashboardBtn" class="btn btn-primary btn-pill">Back to dashboard</button>
       </div>
     </div>
@@ -213,203 +214,103 @@
         <div class="viewer-header">
           <div>
             <div class="viewer-title" id="gameViewerTitle">Game title</div>
-            <div class="viewer-subtitle" id="gameViewerDesc">Game description goes here</div>
+            <div class="viewer-subtitle" id="gameViewerOverview">Have fun!</div>
           </div>
         </div>
 
         <div class="viewer-body">
-          <!-- Embedded game iframe (replaces placeholder play area) -->
-          <div class="d-flex justify-content-center">
-            <iframe
-              id="gameIframe"
-              src=""
-              width="800"
-              height="600"
-              allowfullscreen
-              loading="lazy"
-              style="border:0; max-width: 100%;"
-              title="Game"
-            ></iframe>
+          <div class="ratio ratio-16x9">
+            <iframe id="gameIframe" src="" title="Game" frameborder="0"></iframe>
           </div>
 
-          <div class="d-flex align-items-center justify-content-end mt-2">
-            <a id="openGameInNewTab"
-               class="btn btn-outline-secondary btn-pill"
-               href="#"
-               target="_blank"
-               rel="noopener noreferrer"
-               style="display:none;">
-              Open in new tab
-            </a>
-          </div>
-
-          <div class="viewer-actions">
-            <button id="exitGameViewingBtn" class="btn btn-outline-secondary btn-pill">Exit viewing</button>
+          <div class="viewer-actions" style="margin-top: 14px;">
+            <button id="exitGameViewingBtn" class="btn btn-outline-secondary btn-pill">Exit game</button>
             <button id="gameBackToDashboardBtn" class="btn btn-primary btn-pill">Back to dashboard</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- STREAK WIDGET (NEW) -->
-    <div id="streakWidget" class="streak-widget">
-      <div class="streak-widget-top">
-        <div class="streak-widget-icon" aria-hidden="true">🔥</div>
-        <div class="streak-widget-name" id="streakName">Student</div>
+    <!-- STREAK CARD - Fixed Bottom Left -->
+    <div id="streakCard" style="
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e0e0e0;
+      z-index: 1000;
+      min-width: 160px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(0, 0, 0, 0.15)';" 
+       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.1)';">
+      <div style="font-size: 48px; margin-bottom: 8px; animation: flicker 2s ease-in-out infinite;">🔥</div>
+      <div style="font-size: 48px; font-weight: 700; color: #333; line-height: 1; margin-bottom: 4px;">
+        <span id="streakNumber">0</span>
       </div>
-
-      <div class="streak-widget-count" id="streakCount">0</div>
-      <div class="streak-widget-sub" id="streakCountdown">—</div>
-      <div class="streak-widget-hint" id="streakHint">Complete any activity to earn today’s streak.</div>
+      <div style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">
+        Day Streak
+      </div>
     </div>
 
+    <!-- SETTINGS MODAL (Hidden by default, shown when My Progress button is clicked) -->
+    <div id="settingsModal" class="settings-modal" style="display: none;">
+      <div class="settings-card" style="max-width: 400px;">
+        <div class="settings-header">
+          <div class="settings-title">Your Progress</div>
+          <button id="closeSettingsBtn" class="settings-close-btn">×</button>
+        </div>
+
+        <div class="settings-body" style="padding: 40px 20px; text-align: center;">
+          <!-- Large Streak Card in Modal -->
+          <div style="
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e0e0e0;
+            display: inline-block;
+            min-width: 250px;
+          ">
+            <div style="font-size: 64px; margin-bottom: 16px; animation: flicker 2s ease-in-out infinite;">🔥</div>
+            <div style="font-size: 72px; font-weight: 700; color: #333; line-height: 1; margin-bottom: 8px;">
+              <span id="settingsStreak">0</span>
+            </div>
+            <div style="font-size: 18px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">
+              Day Streak
+            </div>
+            <div style="margin-top: 20px; font-size: 14px; color: #888;">
+              Keep learning every day!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
+  <style>
+    @keyframes flicker {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.85; }
+    }
+  </style>
+
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const params = new URLSearchParams(window.location.search);
-      const name = params.get("name");
-      const interestsParam = params.get("interests");
-      const parentName = params.get("parentName") || "—";
-      const parentEmailRaw = params.get("parentEmail") || "";
-      const parentEmail = parentEmailRaw ? `— ${parentEmailRaw}` : "";
-      const studentId = params.get("studentId") || "";
-
+    document.addEventListener("DOMContentLoaded", async () => {
       const studentNameEl = document.getElementById("studentName");
-      const parentNameEl = document.getElementById("parentName");
-      const parentEmailEl = document.getElementById("parentEmail");
-
-      if (studentNameEl && name) studentNameEl.textContent = name;
-      if (parentNameEl) parentNameEl.textContent = parentName;
-      if (parentEmailEl) parentEmailEl.textContent = parentEmail;
-
       const subjectSelect = document.getElementById("subjectSelect");
-      if (subjectSelect) {
-        const allowed = ["Engineering", "Physics", "Maths"];
-        subjectSelect.value = allowed.includes(interestsParam) ? interestsParam : "Engineering";
-      }
 
-      // -----------------------------
-      // Streak widget
-      // -----------------------------
-      const streakName = document.getElementById("streakName");
-      const streakCount = document.getElementById("streakCount");
-      const streakCountdown = document.getElementById("streakCountdown");
-      const streakHint = document.getElementById("streakHint");
-
-      if (streakName) streakName.textContent = name || "Student";
-
-      let countdownSeconds = 0;
-      let countdownTimer = null;
-
-      function formatCountdown(seconds) {
-        const s = Math.max(0, Number(seconds) || 0);
-        const h = Math.floor(s / 3600);
-        const m = Math.floor((s % 3600) / 60);
-
-        if (h <= 0) return `${m}m until next streak`;
-        return `${h}h ${m}m until next streak`;
-      }
-
-      function startCountdown(seconds) {
-        countdownSeconds = Math.max(0, Number(seconds) || 0);
-
-        if (countdownTimer) clearInterval(countdownTimer);
-
-        if (streakCountdown) streakCountdown.textContent = formatCountdown(countdownSeconds);
-
-        countdownTimer = setInterval(() => {
-          countdownSeconds = Math.max(0, countdownSeconds - 1);
-          if (streakCountdown) streakCountdown.textContent = formatCountdown(countdownSeconds);
-
-          if (countdownSeconds === 0) {
-            loadStreak();
-          }
-        }, 1000);
-      }
-
-      async function loadStreak() {
-        if (!studentId) {
-          if (streakCount) streakCount.textContent = "0";
-          if (streakCountdown) streakCountdown.textContent = "—";
-          if (streakHint) streakHint.textContent = "Sign in to track your streak.";
-          return;
-        }
-
-        try {
-          const res = await fetch(`/api/streak?studentId=${encodeURIComponent(studentId)}`);
-          const data = await res.json();
-          if (!res.ok || !data.success) return;
-
-          if (streakCount) streakCount.textContent = String(data.streakDays ?? 0);
-
-          const seconds = Number(data.secondsUntilNextIncrement ?? 0);
-          startCountdown(seconds);
-
-          const alreadyToday = data.lastStreakDate && data.nzToday && data.lastStreakDate === data.nzToday;
-          if (streakHint) {
-            streakHint.textContent = alreadyToday
-              ? "You have earned today’s streak. Come back tomorrow!"
-              : "Complete any activity to earn today’s streak.";
-          }
-        } catch (e) {
-          console.error("Streak load error:", e);
-        }
-      }
-
-      async function incrementStreak(activity) {
-        if (!studentId) return;
-
-        try {
-          const res = await fetch("/api/streak/increment", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ studentId: Number(studentId), activity })
-          });
-
-          const data = await res.json();
-          if (!res.ok || !data.success) return;
-
-          if (streakCount) streakCount.textContent = String(data.streakDays ?? 0);
-
-          if (typeof data.secondsUntilNextIncrement === "number") {
-            startCountdown(data.secondsUntilNextIncrement);
-          } else {
-            loadStreak();
-          }
-
-          if (streakHint) {
-            streakHint.textContent = data.incremented
-              ? "Nice! You earned today’s streak."
-              : "Already counted today. Come back tomorrow!";
-          }
-        } catch (e) {
-          console.error("Streak increment error:", e);
-        }
-      }
-
-      loadStreak();
-
-      // -----------------------------
-      // Settings nav
-      // -----------------------------
       const settingsButton = document.getElementById("settingsButton");
-      if (settingsButton) {
-        settingsButton.addEventListener("click", () => {
-          const subject = subjectSelect ? subjectSelect.value : (interestsParam || "Engineering");
-          const url =
-            `user-settings.html?studentId=${encodeURIComponent(studentId)}` +
-            `&name=${encodeURIComponent(name || "")}` +
-            `&interests=${encodeURIComponent(subject)}` +
-            `&parentName=${encodeURIComponent(parentName || "")}` +
-            `&parentEmail=${encodeURIComponent(parentEmailRaw)}`;
-          window.location.href = url;
-        });
-      }
+      const settingsIcon = document.getElementById("settingsIcon");
+      const settingsModal = document.getElementById("settingsModal");
+      const closeSettingsBtn = document.getElementById("closeSettingsBtn");
 
-      // -----------------------------
-      // Layout refs
-      // -----------------------------
+      const settingsStreak = document.getElementById("settingsStreak");
+      const streakNumber = document.getElementById("streakNumber");
+
       const learningSelection = document.getElementById("learningSelection");
       const learningPanel = document.getElementById("learningPanel");
 
@@ -417,60 +318,184 @@
       const videosSimpleLayout = document.getElementById("videosSimpleLayout");
       const gamesSimpleLayout = document.getElementById("gamesSimpleLayout");
 
-      const dropdown = document.getElementById("lessonFormatDropdown");
-      const menu = document.getElementById("lessonFormatMenu");
-      const toggleBtn = document.getElementById("lessonFormatToggle");
-      const formatLabel = document.getElementById("lessonFormatLabel");
-
       const selectionButtons = document.querySelectorAll(".selection-btn");
 
-      // Lesson modal
+      const dropdown = document.getElementById("lessonFormatDropdown");
+      const toggleBtn = document.getElementById("lessonFormatToggle");
+      const formatLabel = document.getElementById("lessonFormatLabel");
+      const menu = document.getElementById("lessonFormatMenu");
+
       const recommendedLessonBtn = document.getElementById("recommendedLessonBtn");
+      const recommendedVideoBtn = document.getElementById("recommendedVideoBtn");
+      const recommendedGameBtn = document.getElementById("recommendedGameBtn");
+
       const lessonViewerModal = document.getElementById("lessonViewerModal");
       const exitLessonViewingBtn = document.getElementById("exitLessonViewingBtn");
       const lessonBackToDashboardBtn = document.getElementById("lessonBackToDashboardBtn");
+
+      const videoViewerModal = document.getElementById("videoViewerModal");
+      const videoIframe = document.getElementById("videoIframe");
+      const exitVideoViewingBtn = document.getElementById("exitVideoViewingBtn");
+      const videoBackToDashboardBtn = document.getElementById("videoBackToDashboardBtn");
+
       const lessonCompleteModal = document.getElementById("lessonCompleteModal");
       const backToDashboardBtn = document.getElementById("backToDashboardBtn");
 
-      // Video modal
-      const recommendedVideoBtn = document.getElementById("recommendedVideoBtn");
-      const videoViewerModal = document.getElementById("videoViewerModal");
-      const exitVideoViewingBtn = document.getElementById("exitVideoViewingBtn");
-      const videoBackToDashboardBtn = document.getElementById("videoBackToDashboardBtn");
-      const videoIframe = document.getElementById("videoIframe");
-
-      // Game modal
-      const recommendedGameBtn = document.getElementById("recommendedGameBtn");
       const gameViewerModal = document.getElementById("gameViewerModal");
+      const gameIframe = document.getElementById("gameIframe");
       const exitGameViewingBtn = document.getElementById("exitGameViewingBtn");
       const gameBackToDashboardBtn = document.getElementById("gameBackToDashboardBtn");
-      const gameIframe = document.getElementById("gameIframe");
-      const openGameInNewTab = document.getElementById("openGameInNewTab");
 
       let currentFormat = "lessons";
-      let currentSubject = subjectSelect ? subjectSelect.value : "Engineering";
+      let currentSubject = "Engineering";
 
-      if (learningSelection) learningSelection.style.display = "flex";
-      if (learningPanel) learningPanel.style.display = "none";
+      // Check localStorage for studentId
+      const studentId = localStorage.getItem("studentId");
+      if (!studentId) {
+        alert("No student ID found. Redirecting to login.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Settings modal
+      function openSettingsModal() {
+        if (settingsModal) {
+          settingsModal.style.display = "flex";
+          settingsModal.classList.add("active");
+        }
+      }
+
+      function closeSettingsModal() {
+        if (settingsModal) {
+          settingsModal.style.display = "none";
+          settingsModal.classList.remove("active");
+        }
+      }
+
+      if (settingsButton) settingsButton.addEventListener("click", openSettingsModal);
+      if (settingsIcon) settingsIcon.addEventListener("click", openSettingsModal);
+      if (closeSettingsBtn) closeSettingsBtn.addEventListener("click", closeSettingsModal);
+
+      // Fetch student data using the new endpoint
+      try {
+        console.log("📡 Fetching student data for ID:", studentId);
+        const res = await fetch(`http://localhost:3000/api/student-dashboard-data?studentId=${studentId}`);
+        console.log("📡 Response status:", res.status);
+        
+        const data = await res.json();
+        console.log("📦 Response data:", data);
+
+        if (data.success && data.student) {
+          const student = data.student;
+
+          console.log("✅ Student data:", student);
+
+          const studentName = student.name || "Student";
+          const streakDays = student.streakDays || 0;
+
+          if (studentNameEl) studentNameEl.textContent = studentName;
+          if (settingsStreak) settingsStreak.textContent = streakDays;
+          if (streakNumber) streakNumber.textContent = streakDays;
+
+        } else {
+          console.error("❌ API returned success=false or no student data:", data);
+          alert("Could not load student data.");
+          window.location.href = "index.html";
+        }
+      } catch (err) {
+        console.error("❌ Error loading student data:", err);
+        alert("Error loading student data.");
+      }
+
+      async function incrementStreak(activity = "lesson") {
+        try {
+          const res = await fetch("http://localhost:3000/api/streak/increment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ studentId: Number(studentId), activity }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            console.log("✅ Streak incremented:", data);
+            if (settingsStreak) settingsStreak.textContent = data.streakDays || 0;
+            if (streakNumber) streakNumber.textContent = data.streakDays || 0;
+          }
+        } catch (err) {
+          console.error("❌ Error incrementing streak:", err);
+        }
+      }
+
+      async function logActivity(activityType, contentTitle, durationMinutes = 5) {
+        try {
+          const subject = subjectSelect ? subjectSelect.value : "Engineering";
+          const res = await fetch("http://localhost:3000/api/activity/log", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              studentId: Number(studentId),
+              activityType,
+              subject,
+              contentTitle,
+              durationMinutes
+            }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            console.log("✅ Activity logged:", activityType, contentTitle);
+          }
+        } catch (err) {
+          console.error("❌ Error logging activity:", err);
+        }
+      }
 
       async function fetchContent(subject, format, index = 0) {
-        const url =
-          `/api/content?subject=${encodeURIComponent(subject)}` +
-          `&format=${encodeURIComponent(format)}` +
-          `&index=${encodeURIComponent(index)}`;
-
-        const res = await fetch(url);
+        const res = await fetch(`http://localhost:3000/api/content?subject=${subject}&format=${format}&index=${index}`);
         const data = await res.json();
-        if (!res.ok || !data.success) throw new Error(data.message || "Failed to load content");
-        return data.item;
+        return data.success ? data.item : null;
       }
 
       function renderLessonCard(item) {
         if (!item) return;
-        const title = document.getElementById("lessonCardTitle");
-        const sub = document.getElementById("lessonCardSub");
-        if (title) title.textContent = item.title || "Lesson";
-        if (sub) sub.textContent = "Click to start";
+        const titleEl = document.getElementById("lessonCardTitle");
+        const subEl = document.getElementById("lessonCardSub");
+        if (titleEl) titleEl.textContent = item.title || "Lesson";
+        if (subEl) subEl.textContent = item.overview || "Click to start";
+      }
+
+      function renderLessonMinis() {
+        const mini1 = document.getElementById("lessonMini1");
+        const mini2 = document.getElementById("lessonMini2");
+        const mini3 = document.getElementById("lessonMini3");
+
+        if (mini1) mini1.textContent = "Explore more lessons";
+        if (mini2) mini2.textContent = "Try another topic";
+        if (mini3) mini3.textContent = "Challenge yourself";
+      }
+
+      function renderVideoCard(item) {
+        if (!item) return;
+        const titleEl = document.getElementById("videoCardTitle");
+        const subEl = document.getElementById("videoCardSub");
+        if (titleEl) titleEl.textContent = item.title || "Video";
+        if (subEl) subEl.textContent = item.youtubeId ? "Click to watch" : "No video available";
+      }
+
+      function renderGameCard(item) {
+        if (!item) return;
+        const titleEl = document.getElementById("gameCardTitle");
+        const subEl = document.getElementById("gameCardSub");
+        if (titleEl) titleEl.textContent = item.title || "Game";
+        if (subEl) subEl.textContent = item.url ? "Click to open" : "No game available";
+      }
+
+      function renderGameMinis() {
+        const mini1 = document.getElementById("gameMini1");
+        const mini2 = document.getElementById("gameMini2");
+        const mini3 = document.getElementById("gameMini3");
+
+        if (mini1) mini1.textContent = "More games coming soon";
+        if (mini2) mini2.textContent = "Try a different subject";
+        if (mini3) mini3.textContent = "Explore challenges";
       }
 
       function renderLessonViewer(item) {
@@ -479,152 +504,69 @@
         const titleEl = document.getElementById("lessonViewerTitle");
         const overviewEl = document.getElementById("lessonViewerOverview");
         const blocksEl = document.getElementById("lessonBlocks");
+        const questionEl = document.getElementById("lessonQuestionText");
 
         if (titleEl) titleEl.textContent = item.title || "Lesson";
         if (overviewEl) overviewEl.textContent = item.overview || "";
-        if (blocksEl) blocksEl.innerHTML = "";
 
-        (item.blocks || []).forEach(block => {
-          const card = document.createElement("div");
-          card.className = "viewer-block";
+        if (blocksEl && Array.isArray(item.blocks)) {
+          blocksEl.innerHTML = "";
+          item.blocks.forEach(block => {
+            const div = document.createElement("div");
+            div.className = "viewer-block";
 
-          if (block.heading) {
-            const h = document.createElement("div");
+            const h = document.createElement("h3");
             h.className = "viewer-block-title";
-            h.textContent = block.heading;
-            card.appendChild(h);
-          }
+            h.textContent = block.heading || "";
+            div.appendChild(h);
 
-          if (block.body) {
-            const p = document.createElement("div");
-            p.className = "viewer-block-body";
-            p.textContent = block.body;
-            card.appendChild(p);
-          }
+            const p = document.createElement("p");
+            p.textContent = block.content || "";
+            div.appendChild(p);
 
-          if (Array.isArray(block.bullets) && block.bullets.length) {
-            const ul = document.createElement("ul");
-            ul.className = "viewer-block-list";
-            block.bullets.forEach(b => {
-              const li = document.createElement("li");
-              li.textContent = b;
-              ul.appendChild(li);
-            });
-            card.appendChild(ul);
-          }
+            blocksEl.appendChild(div);
+          });
+        }
 
-          blocksEl.appendChild(card);
+        const quiz = item.quiz || {};
+        if (questionEl) questionEl.textContent = quiz.question || "Question";
+
+        const answers = quiz.answers || [];
+        const correctIndex = quiz.correctIndex ?? -1;
+
+        const answerButtons = [
+          document.getElementById("answer-1"),
+          document.getElementById("answer-2"),
+          document.getElementById("answer-3"),
+          document.getElementById("answer-4"),
+        ].filter(Boolean);
+
+        answerButtons.forEach((btn, i) => {
+          if (answers[i]) {
+            btn.textContent = answers[i];
+            btn.dataset.correct = (i === correctIndex) ? "true" : "false";
+          } else {
+            btn.textContent = "—";
+            btn.dataset.correct = "false";
+          }
         });
-
-        const q = document.getElementById("lessonQuestionText");
-        if (q) q.textContent = item.question?.text || "";
-
-        const answers = item.question?.answers || [];
-        answers.forEach((a, i) => {
-          const btn = document.getElementById(`answer-${i + 1}`);
-          if (!btn) return;
-          btn.textContent = a.text || `Answer ${i + 1}`;
-          btn.dataset.correct = a.correct ? "true" : "false";
-          btn.classList.remove("flash-correct", "flash-incorrect");
-        });
-      }
-
-      function renderVideoCard(item) {
-        if (!item) return;
-
-        const title = document.getElementById("videoCardTitle");
-        const sub = document.getElementById("videoCardSub");
-        if (title) title.textContent = item.title || "Video";
-        if (sub) sub.textContent = "Click to watch";
-
-        const m1 = document.getElementById("videoMini1");
-        const m2 = document.getElementById("videoMini2");
-        const m3 = document.getElementById("videoMini3");
-        const similar = Array.isArray(item.similar) ? item.similar : [];
-
-        if (m1) m1.textContent = similar[0] || "Similar video 1";
-        if (m2) m2.textContent = similar[1] || "Similar video 2";
-        if (m3) m3.textContent = similar[2] || "Similar video 3";
-      }
-
-      function renderGameCard(item) {
-        if (!item) return;
-        const title = document.getElementById("gameCardTitle");
-        const sub = document.getElementById("gameCardSub");
-        if (title) title.textContent = item.title || "Game";
-        if (sub) sub.textContent = "Click to open";
       }
 
       function renderGameViewer(item) {
         if (!item) return;
-
         const titleEl = document.getElementById("gameViewerTitle");
-        const descEl = document.getElementById("gameViewerDesc");
         if (titleEl) titleEl.textContent = item.title || "Game";
-        if (descEl) descEl.textContent = item.description || "";
 
-        if (gameIframe) {
-          gameIframe.src = item.url || "";
+        if (gameIframe && item.url) {
+          gameIframe.src = item.url;
           gameIframe.title = item.title || "Game";
-        }
-
-        if (openGameInNewTab) {
-          if (item.url) {
-            openGameInNewTab.href = item.url;
-            openGameInNewTab.style.display = "inline-flex";
-          } else {
-            openGameInNewTab.href = "#";
-            openGameInNewTab.style.display = "none";
-          }
-        }
-      }
-
-      function renderLessonMinis() {
-        const m1 = document.getElementById("lessonMini1");
-        const m2 = document.getElementById("lessonMini2");
-        const m3 = document.getElementById("lessonMini3");
-        if (!m1 || !m2 || !m3) return;
-
-        if (currentSubject === "Engineering") {
-          m1.textContent = "Bending moments basics";
-          m2.textContent = "Trusses and load paths";
-          m3.textContent = "Deflection and stiffness";
-        } else if (currentSubject === "Physics") {
-          m1.textContent = "Newton’s laws refresher";
-          m2.textContent = "Forces and friction";
-          m3.textContent = "Energy and work";
-        } else {
-          m1.textContent = "Two-step equations";
-          m2.textContent = "Fractions practice";
-          m3.textContent = "Graphing straight lines";
-        }
-      }
-
-      function renderGameMinis() {
-        const m1 = document.getElementById("gameMini1");
-        const m2 = document.getElementById("gameMini2");
-        const m3 = document.getElementById("gameMini3");
-        if (!m1 || !m2 || !m3) return;
-
-        if (currentSubject === "Engineering") {
-          m1.textContent = "Truss builder challenge";
-          m2.textContent = "Tower stability sandbox";
-          m3.textContent = "Load path puzzle";
-        } else if (currentSubject === "Physics") {
-          m1.textContent = "Projectile aim trainer";
-          m2.textContent = "Friction lab";
-          m3.textContent = "Force match quickfire";
-        } else {
-          m1.textContent = "Equation sprint";
-          m2.textContent = "Times table blitz";
-          m3.textContent = "Graph match";
         }
       }
 
       async function loadCurrentContent() {
-        try {
-          currentSubject = subjectSelect ? subjectSelect.value : currentSubject;
+        currentSubject = subjectSelect ? subjectSelect.value : "Engineering";
 
+        try {
           if (currentFormat === "lessons") {
             const item = await fetchContent(currentSubject, "lessons", 0);
             renderLessonCard(item);
@@ -723,6 +665,11 @@
 
       if (videoBackToDashboardBtn) {
         videoBackToDashboardBtn.addEventListener("click", async () => {
+          // Get video info
+          const raw = recommendedVideoBtn ? recommendedVideoBtn.dataset.video : null;
+          const videoTitle = raw ? JSON.parse(raw).title : "Video";
+          
+          await logActivity("video", videoTitle, 10);
           await incrementStreak("video");
           closeVideoModal(true);
 
@@ -751,6 +698,11 @@
 
       if (lessonBackToDashboardBtn) {
         lessonBackToDashboardBtn.addEventListener("click", async () => {
+          // Get lesson info
+          const raw = recommendedLessonBtn ? recommendedLessonBtn.dataset.lesson : null;
+          const lessonTitle = raw ? JSON.parse(raw).title : "Lesson";
+          
+          await logActivity("lesson", lessonTitle, 15);
           await incrementStreak("lesson");
           closeLessonModal();
 
@@ -784,6 +736,11 @@
 
       if (backToDashboardBtn && lessonCompleteModal) {
         backToDashboardBtn.addEventListener("click", async () => {
+          // Get lesson info
+          const raw = recommendedLessonBtn ? recommendedLessonBtn.dataset.lesson : null;
+          const lessonTitle = raw ? JSON.parse(raw).title : "Lesson";
+          
+          await logActivity("lesson", lessonTitle, 15);
           await incrementStreak("lesson");
 
           lessonCompleteModal.classList.remove("active");
@@ -815,6 +772,11 @@
 
       if (gameBackToDashboardBtn) {
         gameBackToDashboardBtn.addEventListener("click", async () => {
+          // Get game info
+          const raw = recommendedGameBtn ? recommendedGameBtn.dataset.game : null;
+          const gameTitle = raw ? JSON.parse(raw).title : "Game";
+          
+          await logActivity("game", gameTitle, 20);
           await incrementStreak("game");
           closeGameModal();
 
@@ -823,6 +785,10 @@
           setActiveFormat("lessons");
         });
       }
+
+      // ✅ FIX: Load initial content when page loads
+      // This ensures the data attributes are set before users click
+      await loadCurrentContent();
     });
   </script>
 

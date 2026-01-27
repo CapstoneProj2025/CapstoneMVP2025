@@ -1,63 +1,107 @@
 {
   "lessons": [
     {
-      "title": "Lines and Graphs",
-      "overview": "Learn how straight-line graphs work and what slope means.",
+      "title": "Fractions, Decimals, and Percentages",
+      "overview": "Master the conversions and relationships between fractions, decimals, and percentages.",
       "blocks": [
         {
-          "heading": "What is a straight line?",
-          "body": "A straight line graph shows a constant rate of change."
+          "heading": "Understanding Fractions",
+          "content": "A fraction represents a part of a whole. The top number (numerator) shows how many parts you have, and the bottom number (denominator) shows how many equal parts make the whole. For example, ¾ means 3 parts out of 4 equal parts."
         },
         {
-          "heading": "Slope (gradient)",
-          "body": "Slope tells you how steep the line is.",
-          "bullets": [
-            "Positive slope goes up",
-            "Negative slope goes down",
-            "Zero slope is flat"
-          ]
+          "heading": "Converting Between Forms",
+          "content": "To convert a fraction to decimal, divide the numerator by denominator: ¾ = 0.75. To convert decimal to percentage, multiply by 100: 0.75 = 75%. To convert percentage to fraction: 75% = 75/100 = ¾."
+        },
+        {
+          "heading": "Practical Applications",
+          "content": "These concepts are used everywhere: calculating discounts (30% off), measuring ingredients (½ cup), understanding test scores (18/20 = 90%), and analyzing data (0.6 of students prefer pizza). Being fluent in all three forms helps you solve problems faster."
         }
       ],
-      "question": {
-        "text": "What does slope represent?",
-        "answers": [
-          { "text": "How steep the line is", "correct": true },
-          { "text": "The colour of the line", "correct": false },
-          { "text": "The size of the graph", "correct": false },
-          { "text": "The number of axes", "correct": false }
-        ]
+      "quiz": {
+        "question": "What is ⅖ as a percentage?",
+        "answers": ["25%", "40%", "50%", "60%"],
+        "correctIndex": 1
+      }
+    },
+    {
+      "title": "Algebra Basics: Solving Equations",
+      "overview": "Learn to solve equations by isolating variables and maintaining balance.",
+      "blocks": [
+        {
+          "heading": "What is Algebra?",
+          "content": "Algebra uses letters (variables) to represent unknown numbers. In the equation x + 5 = 12, x represents an unknown value we need to find. Solving means finding what value of x makes the equation true."
+        },
+        {
+          "heading": "The Balance Method",
+          "content": "An equation is like a balanced scale. Whatever you do to one side, you must do to the other. To solve x + 5 = 12, subtract 5 from both sides: x + 5 - 5 = 12 - 5, so x = 7. Check: 7 + 5 = 12 ✓"
+        },
+        {
+          "heading": "Order of Operations",
+          "content": "Use PEMDAS/BODMAS: Parentheses/Brackets, Exponents/Orders, Multiplication and Division (left to right), Addition and Subtraction (left to right). To solve 2x + 3 = 11, subtract 3 first (2x = 8), then divide by 2 (x = 4)."
+        }
+      ],
+      "quiz": {
+        "question": "Solve for x: 3x - 7 = 14",
+        "answers": ["x = 5", "x = 7", "x = 21", "x = 63"],
+        "correctIndex": 1
+      }
+    },
+    {
+      "title": "Geometry: Area and Perimeter",
+      "overview": "Calculate the area and perimeter of common shapes using formulas.",
+      "blocks": [
+        {
+          "heading": "Perimeter - Distance Around",
+          "content": "Perimeter is the total distance around a shape. For a rectangle, P = 2(length + width). For a square, P = 4 × side. For a circle, it's called circumference: C = 2πr or C = πd, where r is radius and d is diameter."
+        },
+        {
+          "heading": "Area - Space Inside",
+          "content": "Area measures the space inside a shape. Rectangle: A = length × width. Triangle: A = ½ × base × height. Circle: A = πr². Remember: area is always in square units (cm², m²) because we're measuring two dimensions."
+        },
+        {
+          "heading": "Composite Shapes",
+          "content": "Complex shapes can be broken into simpler ones. To find the area of an L-shape, divide it into rectangles, find each area, and add them. For a shape with a hole, subtract the hole's area from the larger shape's area."
+        }
+      ],
+      "quiz": {
+        "question": "A rectangle has length 8m and width 5m. What is its area?",
+        "answers": ["13 m²", "26 m²", "40 m²", "80 m²"],
+        "correctIndex": 2
       }
     }
   ],
   "videos": [
     {
-      "title": "Understanding Slope",
-      "youtubeId": "xwW6wqL-2pY",
-      "similar": [
-        "Graphing Basics",
-        "Lines in Real Life",
-        "Slope Practice"
-      ]
+      "title": "Fractions, Decimals & Percentages",
+      "youtubeId": "L5qGYtkXQtI",
+      "description": "How to convert between fractions, decimals, and percentages"
+    },
+    {
+      "title": "Algebra Basics: Solving Equations",
+      "youtubeId": "NybHckSEQBI",
+      "description": "Learn to solve basic algebraic equations step by step"
+    },
+    {
+      "title": "Area and Perimeter",
+      "youtubeId": "1pxh-2UU60c",
+      "description": "Calculate area and perimeter of common shapes"
     }
   ],
   "games": [
     {
-      "title": "Graphing Lines — PhET",
-      "description": "Explore slope and intercept by graphing lines interactively.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/sims/html/graphing-lines/latest/graphing-lines_en.html"
+      "title": "Fraction Matcher — PhET",
+      "url": "https://phet.colorado.edu/sims/html/fractions-equality/latest/fractions-equality_en.html",
+      "description": "Match equivalent fractions with visual models"
     },
     {
-      "title": "Fractions: Intro — PhET",
-      "description": "Learn fractions using visual models and interactive tools.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/en/simulation/fractions-intro"
+      "title": "Equation Grapher — PhET",
+      "url": "https://phet.colorado.edu/sims/html/graphing-lines/latest/graphing-lines_en.html",
+      "description": "Explore linear equations by graphing lines"
     },
     {
       "title": "Area Builder — PhET",
-      "description": "Build shapes and understand area with interactive tiles.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/en/simulation/area-builder"
+      "url": "https://phet.colorado.edu/sims/html/area-builder/latest/area-builder_en.html",
+      "description": "Build shapes and explore area and perimeter"
     }
   ]
 }

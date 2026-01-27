@@ -91,14 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 showLoginMessage(result.message || 'Login failed.', 'danger');
             } else {
                 if (result.role === 'student') {
-                    const url =
-                        `studentdashboard.html?studentId=${encodeURIComponent(result.studentId)}` +
-                        `&name=${encodeURIComponent(result.name)}` +
-                        `&interests=${encodeURIComponent(result.interest || '')}` +
-                        `&parentName=${encodeURIComponent(result.parentName || '')}` +
-                        `&parentEmail=${encodeURIComponent(result.parentEmail || '')}`;
-                    window.location.href = url;
+                    // ✅ FIX: Store studentId in localStorage before redirecting
+                    localStorage.setItem('studentId', result.studentId);
+                    
+                    // Redirect to student dashboard
+                    window.location.href = 'studentdashboard.html';
                 } else if (result.role === 'parent') {
+                    // Store parentId for parent dashboard
+                    localStorage.setItem('parentId', result.parentId);
+                    
                     const url =
                         `parentdashboard.html?id=${encodeURIComponent(result.parentId)}` +
                         `&role=parent&name=${encodeURIComponent(result.name)}`;

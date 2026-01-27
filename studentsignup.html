@@ -123,15 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok && result.success) {
                 displayMessage('Account created successfully! Redirecting...', 'success');
 
-                const url =
-                  `studentdashboard.html?studentId=${encodeURIComponent(result.studentId)}` +
-                  `&name=${encodeURIComponent(data.studentName)}` +
-                  `&interests=${encodeURIComponent(data.studentInterests)}` +
-                  `&parentName=${encodeURIComponent(data.parentName)}` +
-                  `&parentEmail=${encodeURIComponent(data.parentEmail)}`;
+                // ✅ FIX: Store studentId in localStorage before redirecting
+                localStorage.setItem('studentId', result.studentId);
 
                 setTimeout(() => {
-                    window.location.href = url;
+                    window.location.href = 'studentdashboard.html';
                 }, 1000);
             } else {
                 displayMessage(result.message || 'Error: Server error during student registration.', 'danger');

@@ -1,63 +1,107 @@
 {
   "lessons": [
     {
-      "title": "Forces and Motion",
-      "overview": "Understand how forces change motion.",
+      "title": "Forces and Motion: Newton's Laws",
+      "overview": "Master the fundamental principles of motion and forces that govern our physical world.",
       "blocks": [
         {
-          "heading": "Forces",
-          "body": "A force is a push or pull."
+          "heading": "Newton's First Law - Inertia",
+          "content": "An object at rest stays at rest, and an object in motion stays in motion at constant velocity unless acted upon by an external force. This property of matter to resist changes in motion is called inertia."
         },
         {
-          "heading": "Motion",
-          "body": "Motion changes when a net force acts.",
-          "bullets": [
-            "Speed can increase or decrease",
-            "Direction can change",
-            "Balanced forces mean no change in motion"
-          ]
+          "heading": "Newton's Second Law - F=ma",
+          "content": "The acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. This is expressed as F = ma, where F is force in Newtons, m is mass in kilograms, and a is acceleration in m/s²."
+        },
+        {
+          "heading": "Newton's Third Law - Action-Reaction",
+          "content": "For every action, there is an equal and opposite reaction. When you push against a wall, the wall pushes back with equal force. This explains how rockets work and why you move backward when jumping off a boat."
         }
       ],
-      "question": {
-        "text": "What happens if forces are balanced?",
-        "answers": [
-          { "text": "Motion does not change", "correct": true },
-          { "text": "Object always speeds up", "correct": false },
-          { "text": "Object always stops", "correct": false },
-          { "text": "Gravity disappears", "correct": false }
-        ]
+      "quiz": {
+        "question": "A 5kg object experiences a net force of 20N. What is its acceleration?",
+        "answers": ["2 m/s²", "4 m/s²", "10 m/s²", "100 m/s²"],
+        "correctIndex": 1
+      }
+    },
+    {
+      "title": "Energy and Work",
+      "overview": "Explore the relationship between work, energy, and power in physical systems.",
+      "blocks": [
+        {
+          "heading": "What is Work?",
+          "content": "In physics, work is done when a force causes displacement. Work = Force × Distance × cos(θ), where θ is the angle between force and displacement. Work is measured in Joules (J)."
+        },
+        {
+          "heading": "Kinetic and Potential Energy",
+          "content": "Kinetic energy is the energy of motion: KE = ½mv². Potential energy is stored energy due to position: PE = mgh (gravitational). Energy can transform between these forms but the total remains constant (conservation of energy)."
+        },
+        {
+          "heading": "Power",
+          "content": "Power is the rate of doing work or transferring energy. Power = Work / Time, measured in Watts (W). A 100W light bulb uses 100 Joules of energy per second."
+        }
+      ],
+      "quiz": {
+        "question": "A 2kg ball moving at 10 m/s has what kinetic energy?",
+        "answers": ["20 J", "50 J", "100 J", "200 J"],
+        "correctIndex": 2
+      }
+    },
+    {
+      "title": "Waves and Sound",
+      "overview": "Understand the properties of waves and how sound travels through different media.",
+      "blocks": [
+        {
+          "heading": "Wave Properties",
+          "content": "Waves transfer energy without transferring matter. Key properties include wavelength (λ), frequency (f), amplitude, and speed (v). The wave equation is v = fλ. Frequency is measured in Hertz (Hz)."
+        },
+        {
+          "heading": "Sound Waves",
+          "content": "Sound is a longitudinal wave that travels through compression and rarefaction of particles. Speed of sound in air is approximately 343 m/s at 20°C. Sound cannot travel through a vacuum because it needs a medium."
+        },
+        {
+          "heading": "The Doppler Effect",
+          "content": "The Doppler effect is the change in frequency of a wave as the source moves relative to the observer. This explains why an ambulance siren sounds higher pitched as it approaches and lower as it moves away."
+        }
+      ],
+      "quiz": {
+        "question": "What type of wave is sound?",
+        "answers": ["Transverse", "Longitudinal", "Electromagnetic", "Standing"],
+        "correctIndex": 1
       }
     }
   ],
   "videos": [
     {
-      "title": "Newton’s Laws Explained",
+      "title": "Newton's Laws of Motion Explained",
       "youtubeId": "kKKM8Y-u7ds",
-      "similar": [
-        "Forces in Everyday Life",
-        "Acceleration Basics",
-        "Friction and Motion"
-      ]
+      "description": "Clear explanation of Newton's three laws with real-world examples"
+    },
+    {
+      "title": "Energy: Crash Course Physics",
+      "youtubeId": "fvVO2eZV6RQ",
+      "description": "Comprehensive overview of work, energy, and power"
+    },
+    {
+      "title": "Understanding Waves",
+      "youtubeId": "TsQL0cAVu9Y",
+      "description": "Introduction to wave properties and behaviors"
     }
   ],
   "games": [
     {
       "title": "Forces and Motion: Basics — PhET",
-      "description": "Investigate net force, friction, and how forces affect motion.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_en.html"
+      "url": "https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_en.html",
+      "description": "Interactive simulation to explore Newton's laws and forces"
     },
     {
       "title": "Energy Skate Park — PhET",
-      "description": "Explore kinetic and potential energy on a skateboard track.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/en/simulation/energy-skate-park"
+      "url": "https://phet.colorado.edu/sims/html/energy-skate-park/latest/energy-skate-park_en.html",
+      "description": "Learn about energy conservation with a skateboarder"
     },
     {
-      "title": "Geometric Optics — PhET",
-      "description": "Experiment with lenses, mirrors, and light rays.",
-      "provider": "PhET",
-      "url": "https://phet.colorado.edu/en/simulations/geometric-optics"
+      "title": "Wave on a String — PhET",
+      "url": "https://phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_en.html",
+      "description": "Explore wave properties with an interactive string"
     }
   ]
 }

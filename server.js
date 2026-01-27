@@ -198,7 +198,8 @@ app.post("/api/register-student", async (req, res) => {
     studentPassword,
     studentAge,
     studentInterests,
-    parentId,
+    parentName,
+    parentEmail,
   } = req.body;
 
   if (
@@ -227,6 +228,15 @@ app.post("/api/register-student", async (req, res) => {
 
     const hash = await bcrypt.hash(studentPassword, 10);
 
+    // Try to find parent by email if provided
+    let parentId = null;
+    if (parentEmail) {
+      const parent = await getParentByEmail(conn, parentEmail);
+      if (parent) {
+        parentId = parent.id;
+      }
+    }
+
     const [sRes] = await conn.execute(
       "INSERT INTO students (full_name, email, password_hash, age, interest, parent_id, streak_days, last_streak_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
       [
@@ -235,7 +245,7 @@ app.post("/api/register-student", async (req, res) => {
         hash,
         Number(studentAge),
         studentInterests,
-        parentId ? Number(parentId) : null,
+        parentId,
         0,
         null,
       ]
@@ -293,6 +303,7 @@ app.post("/api/login", async (req, res) => {
         role: "student",
         studentId: student.id,
         name: student.full_name,
+        email: student.email,
         interests: student.interest,
         parentId: student.parent_id,
         streakDays: student.streak_days || 0,
@@ -329,6 +340,80 @@ app.post("/api/login", async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Server error during login." });
+  }
+});
+
+// ✅ NEW ENDPOINT: Get student dashboard data by studentId
+app.get("/api/student-dashboard-data", async (req, res) => {
+  const studentId = Number(req.query.studentId);
+  console.log("📍 Received request for studentId:", req.query.studentId, "→ Parsed as:", studentId);
+  
+  if (!studentId) {
+    console.log("❌ Invalid studentId");
+    return res
+      .status(400)
+      .json({ success: false, message: "studentId is required." });
+  }
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    const [sRows] = await conn.execute(
+      "SELECT id, full_name, email, age, interest, parent_id, streak_days, last_streak_date FROM students WHERE id = ?",
+      [studentId]
+    );
+    
+    console.log("📦 Query result:", sRows);
+    
+    const student = sRows[0];
+    if (!student) {
+      conn.release();
+      console.log("❌ Student not found for ID:", studentId);
+      return res
+        .status(404)
+        .json({ success: false, message: "Student not found." });
+    }
+
+    console.log("✅ Found student:", student.full_name);
+
+    // Get parent info if parent_id exists
+    let parent = null;
+    if (student.parent_id) {
+      const [pRows] = await conn.execute(
+        "SELECT id, full_name, email FROM parents WHERE id = ?",
+        [student.parent_id]
+      );
+      parent = pRows[0] || null;
+      console.log("✅ Found parent:", parent ? parent.full_name : "None");
+    }
+
+    conn.release();
+
+    const responseData = {
+      success: true,
+      student: {
+        id: student.id,
+        name: student.full_name,
+        email: student.email,
+        age: student.age,
+        interests: student.interest,
+        streakDays: student.streak_days || 0,
+        lastStreakDate: student.last_streak_date,
+      },
+      parent: parent ? {
+        id: parent.id,
+        name: parent.full_name,
+        email: parent.email,
+      } : null,
+    };
+    
+    console.log("✅ Sending response:", responseData);
+    return res.json(responseData);
+  } catch (err) {
+    if (conn) conn.release();
+    console.error("❌ Error in /api/student-dashboard-data:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
@@ -556,6 +641,155 @@ app.post("/api/streak/increment", async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Server error updating streak." });
+  }
+});
+
+// -------------------- ACTIVITY TRACKING ENDPOINTS --------------------
+
+/**
+ * POST /api/activity/log
+ * Log a student activity (lesson, video, or game)
+ * Body: { studentId, activityType, subject, contentTitle, durationMinutes }
+ */
+app.post("/api/activity/log", async (req, res) => {
+  const { studentId, activityType, subject, contentTitle, durationMinutes } = req.body;
+
+  if (!studentId || !activityType || !subject) {
+    return res
+      .status(400)
+      .json({ success: false, message: "studentId, activityType, and subject are required." });
+  }
+
+  const allowed = ["lesson", "video", "game"];
+  if (!allowed.includes(activityType)) {
+    return res.status(400).json({ success: false, message: "Invalid activityType." });
+  }
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    // Insert activity log
+    await conn.execute(
+      `INSERT INTO student_activities 
+       (student_id, activity_type, subject, content_title, duration_minutes, completed) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [studentId, activityType, subject, contentTitle || null, durationMinutes || 5, true]
+    );
+
+    // Update or create daily session
+    const today = new Date().toISOString().split('T')[0];
+    
+    await conn.execute(
+      `INSERT INTO daily_sessions 
+       (student_id, session_date, total_minutes, lessons_count, videos_count, games_count)
+       VALUES (?, ?, ?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE
+         total_minutes = total_minutes + VALUES(total_minutes),
+         lessons_count = lessons_count + VALUES(lessons_count),
+         videos_count = videos_count + VALUES(videos_count),
+         games_count = games_count + VALUES(games_count),
+         updated_at = CURRENT_TIMESTAMP`,
+      [
+        studentId,
+        today,
+        durationMinutes || 5,
+        activityType === 'lesson' ? 1 : 0,
+        activityType === 'video' ? 1 : 0,
+        activityType === 'game' ? 1 : 0
+      ]
+    );
+
+    conn.release();
+
+    return res.json({
+      success: true,
+      message: "Activity logged successfully"
+    });
+  } catch (err) {
+    if (conn) conn.release();
+    console.error("❌ Error in /api/activity/log:", err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error logging activity." });
+  }
+});
+
+/**
+ * GET /api/activity/analytics
+ * Get analytics data for a student
+ * Query params: studentId, days (optional, default 7)
+ */
+app.get("/api/activity/analytics", async (req, res) => {
+  const studentId = Number(req.query.studentId);
+  const days = Number(req.query.days) || 7;
+
+  if (!studentId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "studentId is required." });
+  }
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    // Get daily sessions for the past N days
+    const [sessions] = await conn.execute(
+      `SELECT session_date, total_minutes, lessons_count, videos_count, games_count
+       FROM daily_sessions
+       WHERE student_id = ? AND session_date >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
+       ORDER BY session_date ASC`,
+      [studentId, days]
+    );
+
+    // Get subject distribution
+    const [subjectDist] = await conn.execute(
+      `SELECT subject, COUNT(*) as count
+       FROM student_activities
+       WHERE student_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+       GROUP BY subject`,
+      [studentId]
+    );
+
+    // Get recent activities
+    const [recentActivities] = await conn.execute(
+      `SELECT activity_type, subject, content_title, created_at
+       FROM student_activities
+       WHERE student_id = ?
+       ORDER BY created_at DESC
+       LIMIT 10`,
+      [studentId]
+    );
+
+    // Get total stats
+    const [totalStats] = await conn.execute(
+      `SELECT 
+         COUNT(*) as total_activities,
+         SUM(CASE WHEN activity_type = 'lesson' THEN 1 ELSE 0 END) as total_lessons,
+         SUM(duration_minutes) as total_minutes
+       FROM student_activities
+       WHERE student_id = ? AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)`,
+      [studentId]
+    );
+
+    conn.release();
+
+    return res.json({
+      success: true,
+      data: {
+        dailySessions: sessions,
+        subjectDistribution: subjectDist,
+        recentActivities: recentActivities,
+        totalStats: totalStats[0] || { total_activities: 0, total_lessons: 0, total_minutes: 0 }
+      }
+    });
+  } catch (err) {
+    if (conn) conn.release();
+    console.error("❌ Error in /api/activity/analytics:", err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error fetching analytics." });
   }
 });
 

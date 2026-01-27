@@ -7,137 +7,557 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+        
+        .chart-container-small {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #4ECDC4;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+        
+        .streak-card {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(78, 205, 196, 0.3);
+        }
+        
+        .streak-flame {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .streak-number-large {
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .streak-label-large {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+        
+        .activity-item {
+            padding: 12px;
+            border-left: 3px solid #4ECDC4;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .activity-time {
+            font-size: 11px;
+            color: #888;
+        }
+        
+        .activity-text {
+            font-size: 13px;
+            color: #333;
+            margin-top: 4px;
+        }
+        
+        .student-header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .student-info h4 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+        
+        .student-info p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
 
-<!-- HEADER (unchanged) -->
 <header class="container d-flex align-items-center justify-content-between my-3">
     <a class="brand" href="index.html">
-        <div class="logo">CN</div>
+        <div class="logo">EDU</div>
         <div class="name">Parent Dashboard</div>
     </a>
 
     <nav class="desktop-nav d-flex gap-3">
-        <a class="nav-link" href="#">Premium</a>
-        <a class="nav-link" href="#">Courses</a>
-        <a class="nav-link" href="#">Contact</a>
+        <button class="btn btn-outline-secondary btn-pill" id="logoutBtn">Logout</button>
     </nav>
 </header>
 
-<!-- DASHBOARD -->
-<main class="parent-dashboard-container">
-    <div class="parent-dashboard-shell">
+<main class="container my-4">
+    <!-- Student Header -->
+    <div class="student-header">
+        <div class="student-avatar" id="studentAvatar">M</div>
+        <div class="student-info">
+            <h4 id="studentName">Loading...</h4>
+            <p id="studentEmail">—</p>
+        </div>
+        <div class="ms-auto">
+            <select class="form-select" id="studentSelect">
+                <option value="">Loading students...</option>
+            </select>
+        </div>
+    </div>
 
-        <div class="row g-3">
-
-            <!-- LEFT COLUMN -->
-            <div class="col-lg-3">
-                <div class="parent-dashboard-card text-center">
-
-                    <div class="upgrade-placeholder"></div>
-                    <p class="fw-semibold mb-2">Want more out of x?</p>
-                    <button class="btn btn-solid btn-pill">Upgrade to Premium</button>
-
-                    <hr class="my-3">
-                    <h6 class="fw-bold mb-2">LEAGUE TABLE</h6>
-                    <div class="league-row">
-                        <span>BRONZE</span>
-                        <span>SILVER</span>
-                    </div>
-
-                </div>
+    <div class="row g-4">
+        <!-- Left Column - Stats -->
+        <div class="col-lg-3">
+            <!-- Streak Card -->
+            <div class="streak-card mb-4">
+                <div class="streak-flame">🔥</div>
+                <div class="streak-number-large" id="streakNumber">0</div>
+                <div class="streak-label-large">Day Streak</div>
             </div>
-
-            <!-- MIDDLE COLUMN -->
-            <div class="col-lg-6">
-                <div class="parent-dashboard-card">
-
-                    <div class="student-switcher mb-3">
-                        <div class="student-avatar"></div>
-                        <div class="student-switcher-name" id="studentName">Matthew</div>
-
-                        <div class="dropdown ms-auto">
-                            <button class="btn btn-outline-secondary btn-pill dropdown-toggle" data-bs-toggle="dropdown">
-                                Switch
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Matthew</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-8">
-                            <div class="parent-dashboard-card h-100">
-                                <div class="analytics-placeholder">
-                                    Chart for time spent on site
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="parent-dashboard-card h-100">
-                                <div class="activity-placeholder">
-                                    Recent Activity
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="parent-dashboard-card h-100">
-                                <div class="settings-placeholder">
-                                    Settings
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="parent-dashboard-card h-100">
-                                <div class="progress-placeholder">
-                                    Progress Overview
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+            
+            <!-- Quick Stats -->
+            <div class="stat-card mb-3">
+                <div class="stat-number" id="totalLessons">0</div>
+                <div class="stat-label">Lessons Completed</div>
             </div>
-
-            <!-- RIGHT COLUMN -->
-            <div class="col-lg-3">
-                <div class="parent-dashboard-card text-center">
-
-                    <p class="mb-1">
-                        <strong id="streakStudentName">Matthew</strong> has a
-                    </p>
-                    <div class="streak-number" id="dayStreak">11</div>
-                    <div class="streak-label">DAY STREAK</div>
-
-                    <hr class="my-3">
-                    <div class="feedback-placeholder">
-                        <div class="fw-bold">FEEDBACK FORM</div>
-                        <div class="small">(Coming soon)</div>
-                    </div>
-
-                </div>
+            
+            <div class="stat-card mb-3">
+                <div class="stat-number" id="totalMinutes">0</div>
+                <div class="stat-label">Minutes This Week</div>
             </div>
-
         </div>
 
+        <!-- Middle Column - Charts -->
+        <div class="col-lg-6">
+            <!-- Weekly Activity Chart -->
+            <div class="chart-card">
+                <div class="chart-title">Weekly Learning Activity</div>
+                <div class="chart-container">
+                    <canvas id="weeklyActivityChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Subject Distribution -->
+            <div class="chart-card">
+                <div class="chart-title">Subject Distribution</div>
+                <div class="chart-container-small">
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Recent Activity -->
+        <div class="col-lg-3">
+            <div class="chart-card" style="max-height: 600px; overflow-y: auto;">
+                <div class="chart-title">Recent Activity</div>
+                <div id="activityFeed">
+                    <p class="text-muted text-center">Loading activity...</p>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
-    const studentData = {
-        name: "Matthew",
-        streak: 11
-    };
-
-    document.getElementById("studentName").textContent = studentData.name;
-    document.getElementById("streakStudentName").textContent = studentData.name;
-    document.getElementById("dayStreak").textContent = studentData.streak;
+document.addEventListener('DOMContentLoaded', async () => {
+    // Get parent ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const parentId = urlParams.get('id');
+    
+    if (!parentId) {
+        alert('No parent ID found. Redirecting to login.');
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    // Elements
+    const studentSelect = document.getElementById('studentSelect');
+    const studentName = document.getElementById('studentName');
+    const studentEmail = document.getElementById('studentEmail');
+    const studentAvatar = document.getElementById('studentAvatar');
+    const streakNumber = document.getElementById('streakNumber');
+    const totalLessons = document.getElementById('totalLessons');
+    const totalMinutes = document.getElementById('totalMinutes');
+    const activityFeed = document.getElementById('activityFeed');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    let students = [];
+    let currentStudent = null;
+    let charts = {};
+    
+    // Logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    }
+    
+    // Fetch parent and students data
+    try {
+        const response = await fetch(`http://localhost:3000/api/parent-dashboard-data?parentId=${parentId}`);
+        const data = await response.json();
+        
+        if (data.success && data.students) {
+            students = data.students;
+            
+            // Populate student selector
+            studentSelect.innerHTML = students.map((s, index) => 
+                `<option value="${s.id}" ${index === 0 ? 'selected' : ''}>${s.full_name}</option>`
+            ).join('');
+            
+            // Load first student
+            if (students.length > 0) {
+                currentStudent = students[0];
+                loadStudentData(currentStudent);
+            }
+            
+            // Student select change
+            studentSelect.addEventListener('change', (e) => {
+                const selectedId = parseInt(e.target.value);
+                currentStudent = students.find(s => s.id === selectedId);
+                if (currentStudent) {
+                    loadStudentData(currentStudent);
+                }
+            });
+        } else {
+            alert('Could not load student data.');
+        }
+    } catch (err) {
+        console.error('Error loading parent data:', err);
+        alert('Error loading data.');
+    }
+    
+    function loadStudentData(student) {
+        // Update header
+        studentName.textContent = student.full_name;
+        studentEmail.textContent = student.email;
+        studentAvatar.textContent = student.full_name.charAt(0).toUpperCase();
+        streakNumber.textContent = student.streak_days || 0;
+        
+        // Fetch real analytics data from API
+        fetchAnalytics(student.id);
+    }
+    
+    async function fetchAnalytics(studentId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/activity/analytics?studentId=${studentId}&days=7`);
+            const result = await response.json();
+            
+            if (result.success) {
+                const analytics = processAnalyticsData(result.data);
+                
+                // Update stats
+                totalLessons.textContent = analytics.totalStats.total_lessons;
+                totalMinutes.textContent = analytics.totalStats.total_minutes;
+                
+                // Update charts
+                updateWeeklyChart(analytics.weeklyActivity);
+                updateSubjectChart(analytics.subjectDistribution);
+                
+                // Update activity feed
+                updateActivityFeed(analytics.recentActivity);
+            } else {
+                console.error('Failed to fetch analytics:', result.message);
+                // Fallback to mock data
+                const analytics = generateMockAnalytics(students.find(s => s.id === studentId));
+                updateWithMockData(analytics);
+            }
+        } catch (err) {
+            console.error('Error fetching analytics:', err);
+            // Fallback to mock data
+            const analytics = generateMockAnalytics(students.find(s => s.id === studentId));
+            updateWithMockData(analytics);
+        }
+    }
+    
+    function processAnalyticsData(data) {
+        // Process daily sessions into chart format
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const today = new Date();
+        const weeklyData = {
+            labels: [],
+            lessons: [],
+            minutes: []
+        };
+        
+        // Build last 7 days
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            const dateStr = date.toISOString().split('T')[0];
+            const dayName = days[date.getDay()];
+            
+            const session = data.dailySessions.find(s => s.session_date === dateStr);
+            
+            weeklyData.labels.push(dayName);
+            weeklyData.lessons.push(session ? (session.lessons_count + session.videos_count + session.games_count) : 0);
+            weeklyData.minutes.push(session ? session.total_minutes : 0);
+        }
+        
+        // Process subject distribution
+        const subjectDist = {};
+        data.subjectDistribution.forEach(item => {
+            subjectDist[item.subject] = item.count;
+        });
+        
+        // If no data, add defaults
+        if (Object.keys(subjectDist).length === 0) {
+            subjectDist['Engineering'] = 0;
+            subjectDist['Physics'] = 0;
+            subjectDist['Maths'] = 0;
+        }
+        
+        // Process recent activities
+        const recentActivity = data.recentActivities.map(activity => {
+            const activityDate = new Date(activity.created_at);
+            const timeAgo = getTimeAgo(activityDate);
+            
+            return {
+                time: timeAgo,
+                text: `${activity.activity_type === 'lesson' ? 'Completed' : activity.activity_type === 'video' ? 'Watched' : 'Played'} "${activity.content_title || 'Unknown'}"`,
+                type: activity.activity_type
+            };
+        });
+        
+        return {
+            totalStats: data.totalStats,
+            weeklyActivity: weeklyData,
+            subjectDistribution: subjectDist,
+            recentActivity: recentActivity
+        };
+    }
+    
+    function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        
+        if (seconds < 60) return 'Just now';
+        if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+        if (seconds < 172800) return '1 day ago';
+        return `${Math.floor(seconds / 86400)} days ago`;
+    }
+    
+    function updateWithMockData(analytics) {
+        totalLessons.textContent = analytics.totalLessons;
+        totalMinutes.textContent = analytics.totalMinutes;
+        updateWeeklyChart(analytics.weeklyActivity);
+        updateSubjectChart(analytics.subjectDistribution);
+        updateActivityFeed(analytics.recentActivity);
+    }
+    
+    function generateMockAnalytics(student) {
+        // This would come from your database in production
+        const interests = student.interest || 'Engineering';
+        
+        return {
+            totalLessons: Math.floor(Math.random() * 50) + 20,
+            totalMinutes: Math.floor(Math.random() * 300) + 150,
+            weeklyActivity: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                lessons: [3, 5, 2, 4, 6, 8, 3],
+                minutes: [25, 40, 15, 35, 50, 65, 30]
+            },
+            subjectDistribution: {
+                Engineering: interests === 'Engineering' ? 45 : 20,
+                Physics: interests === 'Physics' ? 45 : 30,
+                Maths: interests === 'Maths' ? 45 : 25
+            },
+            recentActivity: [
+                { time: '2 hours ago', text: 'Completed "Forces and Motion" lesson', type: 'lesson' },
+                { time: '5 hours ago', text: 'Watched video on Circuits', type: 'video' },
+                { time: '1 day ago', text: 'Played Energy Skate Park game', type: 'game' },
+                { time: '1 day ago', text: 'Completed "Algebra Basics" lesson', type: 'lesson' },
+                { time: '2 days ago', text: 'Watched video on Newton\'s Laws', type: 'video' }
+            ]
+        };
+    }
+    
+    function updateWeeklyChart(data) {
+        const ctx = document.getElementById('weeklyActivityChart');
+        
+        if (charts.weekly) {
+            charts.weekly.destroy();
+        }
+        
+        charts.weekly = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [
+                    {
+                        label: 'Lessons',
+                        data: data.lessons,
+                        backgroundColor: 'rgba(78, 205, 196, 0.8)',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Minutes',
+                        data: data.minutes,
+                        backgroundColor: 'rgba(68, 160, 141, 0.8)',
+                        borderRadius: 6,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Lessons'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Minutes'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateSubjectChart(data) {
+        const ctx = document.getElementById('subjectChart');
+        
+        if (charts.subject) {
+            charts.subject.destroy();
+        }
+        
+        charts.subject = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: [
+                        'rgba(78, 205, 196, 0.8)',
+                        'rgba(68, 160, 141, 0.8)',
+                        'rgba(86, 204, 242, 0.8)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateActivityFeed(activities) {
+        const emojis = {
+            lesson: '📚',
+            video: '🎥',
+            game: '🎮'
+        };
+        
+        activityFeed.innerHTML = activities.map(activity => `
+            <div class="activity-item">
+                <div class="activity-time">${emojis[activity.type]} ${activity.time}</div>
+                <div class="activity-text">${activity.text}</div>
+            </div>
+        `).join('');
+    }
+});
 </script>
 
 </body>
