@@ -5,7 +5,6 @@ const cors = require("cors");
 const path = require("path");
 const mysql = require("mysql2/promise");
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const fs = require("fs/promises");
 
 const app = express();
@@ -31,14 +30,6 @@ const pool = mysql.createPool({
 });
 
 // -------------------- HELPERS --------------------
-function makeTempPassword() {
-  return crypto
-    .randomBytes(8)
-    .toString("base64")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .slice(0, 12);
-}
-
 async function getParentByEmail(conn, email) {
   const [rows] = await conn.execute(
     "SELECT id, full_name, email, password_hash FROM parents WHERE email = ?",
@@ -93,6 +84,7 @@ app.post("/api/register-parent", async (req, res) => {
     parentPassword,
     studentName,
     studentEmail,
+    studentPassword,
     studentAge,
     studentInterests,
   } = req.body;
@@ -103,6 +95,7 @@ app.post("/api/register-parent", async (req, res) => {
     !parentPassword ||
     !studentName ||
     !studentEmail ||
+    !studentPassword ||
     !studentAge
   ) {
     return res
@@ -141,8 +134,7 @@ app.post("/api/register-parent", async (req, res) => {
     );
     const parentId = parentInsert.insertId;
 
-    const tempStudentPassword = makeTempPassword();
-    const studentHash = await bcrypt.hash(tempStudentPassword, 10);
+    const studentHash = await bcrypt.hash(studentPassword, 10);
 
     const [studentInsert] = await conn.execute(
       "INSERT INTO students (full_name, email, password_hash, age, interest, parent_id, streak_days, last_streak_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
@@ -167,7 +159,6 @@ app.post("/api/register-parent", async (req, res) => {
       role: "parent",
       parentId,
       studentId,
-      studentTempPassword: tempStudentPassword,
       message: "Parent + student created successfully.",
     });
   } catch (err) {

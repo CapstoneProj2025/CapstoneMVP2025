@@ -141,6 +141,87 @@
             font-size: 13px;
             color: #666;
         }
+        
+        .student-list-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-top: 30px;
+        }
+        
+        .student-list-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .student-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4ECDC4;
+        }
+        
+        .student-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .student-card-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .student-card-info {
+            flex: 1;
+        }
+        
+        .student-card-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        .student-card-email {
+            font-size: 13px;
+            color: #666;
+            margin: 2px 0 0 0;
+        }
+        
+        .student-card-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .student-detail-item {
+            font-size: 13px;
+        }
+        
+        .student-detail-label {
+            color: #888;
+            font-weight: 500;
+        }
+        
+        .student-detail-value {
+            color: #333;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -152,6 +233,8 @@
     </a>
 
     <nav class="desktop-nav d-flex gap-3">
+        <button class="btn btn-primary btn-pill" id="viewStudentDashboardBtn">View Student Dashboard</button>
+        <button class="btn btn-primary btn-pill" id="addStudentBtn">+ Add Student</button>
         <button class="btn btn-outline-secondary btn-pill" id="logoutBtn">Logout</button>
     </nav>
 </header>
@@ -222,6 +305,14 @@
             </div>
         </div>
     </div>
+    
+    <!-- Student List Section -->
+    <div class="student-list-section">
+        <div class="student-list-title">All Students</div>
+        <div id="studentListContainer">
+            <p class="text-muted">Loading students...</p>
+        </div>
+    </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -249,10 +340,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     const totalMinutes = document.getElementById('totalMinutes');
     const activityFeed = document.getElementById('activityFeed');
     const logoutBtn = document.getElementById('logoutBtn');
+    const addStudentBtn = document.getElementById('addStudentBtn');
+    const viewStudentDashboardBtn = document.getElementById('viewStudentDashboardBtn');
+    const studentListContainer = document.getElementById('studentListContainer');
     
     let students = [];
     let currentStudent = null;
     let charts = {};
+    let parentInfo = null;
+    
+    // View Student Dashboard button
+    if (viewStudentDashboardBtn) {
+        viewStudentDashboardBtn.addEventListener('click', () => {
+            if (currentStudent) {
+                // Store studentId in localStorage and redirect to student dashboard
+                localStorage.setItem('studentId', currentStudent.id);
+                window.location.href = 'studentdashboard.html';
+            } else {
+                alert('Please select a student first.');
+            }
+        });
+    }
+    
+    // Add Student button
+    if (addStudentBtn) {
+        addStudentBtn.addEventListener('click', () => {
+            // Store parent info in localStorage for the add student page
+            if (parentInfo) {
+                localStorage.setItem('addStudentParentData', JSON.stringify({
+                    parentId: parentId,
+                    parentName: parentInfo.full_name,
+                    parentEmail: parentInfo.email
+                }));
+                window.location.href = 'addstudent.html';
+            }
+        });
+    }
     
     // Logout
     if (logoutBtn) {
@@ -268,6 +391,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         if (data.success && data.students) {
             students = data.students;
+            parentInfo = data.parent;
+            
+            // Render student list
+            renderStudentList(students);
             
             // Populate student selector
             studentSelect.innerHTML = students.map((s, index) => 
@@ -554,6 +681,43 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="activity-item">
                 <div class="activity-time">${emojis[activity.type]} ${activity.time}</div>
                 <div class="activity-text">${activity.text}</div>
+            </div>
+        `).join('');
+    }
+    
+    function renderStudentList(students) {
+        if (!students || students.length === 0) {
+            studentListContainer.innerHTML = '<p class="text-muted">No students found.</p>';
+            return;
+        }
+        
+        studentListContainer.innerHTML = students.map(student => `
+            <div class="student-card">
+                <div class="student-card-header">
+                    <div class="student-card-avatar">${student.full_name.charAt(0).toUpperCase()}</div>
+                    <div class="student-card-info">
+                        <h3 class="student-card-name">${student.full_name}</h3>
+                        <p class="student-card-email">${student.email}</p>
+                    </div>
+                </div>
+                <div class="student-card-details">
+                    <div class="student-detail-item">
+                        <span class="student-detail-label">Age:</span>
+                        <span class="student-detail-value">${student.age || 'N/A'}</span>
+                    </div>
+                    <div class="student-detail-item">
+                        <span class="student-detail-label">Interest:</span>
+                        <span class="student-detail-value">${student.interest || 'N/A'}</span>
+                    </div>
+                    <div class="student-detail-item">
+                        <span class="student-detail-label">Streak:</span>
+                        <span class="student-detail-value">🔥 ${student.streak_days || 0} days</span>
+                    </div>
+                    <div class="student-detail-item">
+                        <span class="student-detail-label">Last Active:</span>
+                        <span class="student-detail-value">${student.last_streak_date || 'Never'}</span>
+                    </div>
+                </div>
             </div>
         `).join('');
     }
